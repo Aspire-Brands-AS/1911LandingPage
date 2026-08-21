@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1911 Dogwear — From Polar Peaks to Everyday Adventure</title>
+  <link rel="stylesheet" href="https://use.typekit.net/yua3lml.css">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --red: #C8102E;
+      --white: #F5F0E8;
+      --black: #080808;
+      --gray: #2a2a2a;
+      --muted: #888;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: "copperplate", serif;
+      letter-spacing: 0.02em;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 28px 48px;
+      background: linear-gradient(to bottom, rgba(8, 8, 8, 0.95) 0%, transparent 100%);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .logo-img-stacked {
+      height: 45px;
+      width: auto;
+      display: block;
+    }
+
+    .logo-mark {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      line-height: 1;
+    }
+
+    .logo-1911 {
+      font-family: "copperplate", serif;
+      font-size: 44px;
+      color: var(--white);
+      letter-spacing: -1px;
+    }
+
+    .logo-pipe {
+      width: 5px;
+      height: 44px;
+      background: var(--red);
+      margin: 0 6px;
+      flex-shrink: 0;
+    }
+
+    .logo-dogwear {
+      font-family: "copperplate", serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.35em;
+      color: var(--white);
+      align-self: center;
+      margin-top: 2px;
+    }
+
+    .logo-tagline {
+      font-family: "copperplate", serif;
+      font-size: 11px;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: lowercase;
+      padding-left: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+      padding-top: 6px;
+    }
+
+    .nav-links a {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      opacity: 0.75;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      height: 100svh;
+      min-height: 600px;
+      overflow: hidden;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-video-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      aspect-ratio: 16 / 9;
+    }
+
+    .hero-video-wrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+          rgba(8, 8, 8, 0.3) 0%,
+          transparent 20%,
+          transparent 55%,
+          rgba(8, 8, 8, 0.7) 80%,
+          rgba(8, 8, 8, 1) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── MANIFESTO ── */
+    .manifesto {
+      padding: 120px 24px 100px;
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .section-year {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .section-year::before,
+    .section-year::after {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--red);
+      opacity: 0.5;
+    }
+
+    .manifesto p {
+      font-family: "copperplate", serif;
+      font-size: clamp(18px, 2.5vw, 26px);
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(245, 240, 232, 0.88);
+      margin-bottom: 24px;
+    }
+
+    .manifesto p.accent {
+      font-size: clamp(20px, 3vw, 30px);
+      font-weight: 600;
+      font-style: italic;
+      color: var(--white);
+      margin-bottom: 32px;
+    }
+
+    .manifesto p strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      margin-top: 52px;
+      padding: 18px 52px;
+      font-family: "copperplate", serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--white);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s;
+    }
+
+    .cta-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--red);
+      transform: translateX(-101%);
+      transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    .cta-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-btn:hover {
+      color: var(--white);
+    }
+
+    .cta-btn:hover::before {
+      transform: translateX(0);
+    }
+
+    /* ── DIVIDER LOGO ── */
+    .divider-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 60px 0;
+      border-top: 1px solid rgba(245, 240, 232, 0.08);
+      border-bottom: 1px solid rgba(245, 240, 232, 0.08);
+      margin: 0 48px;
+    }
+
+    .divider-logo-img {
+      height: 160px;
+      width: auto;
+      max-width: 100%;
+      opacity: 0.85;
+    }
+
+    .divider-logo .d-1911 {
+      font-family: "copperplate", serif;
+      font-size: 72px;
+      color: var(--white);
+      letter-spacing: 0.06em;
+      line-height: 1;
+    }
+
+    .divider-logo .d-dw {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.5);
+    }
+
+    .divider-logo .d-bar {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .divider-logo .d-bar span {
+      width: 28px;
+      height: 3px;
+    }
+
+    .d-bar .r {
+      background: var(--red);
+    }
+
+    .d-bar .w {
+      background: var(--white);
+    }
+
+    /* ── RETAILER ── */
+    .retailer {
+      padding: 100px 48px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .retailer h2 {
+      font-family: "copperplate", serif;
+      font-size: clamp(36px, 5vw, 60px);
+      letter-spacing: 0.06em;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .retailer .sub {
+      text-align: center;
+      font-family: "copperplate", serif;
+      font-size: 16px;
+      font-style: italic;
+      color: rgba(245, 240, 232, 0.5);
+      margin-bottom: 48px;
+      letter-spacing: 0.06em;
+    }
+
+    .map-preview {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #0e0d0c;
+      border: 1px solid rgba(245, 240, 232, 0.1);
+      overflow: hidden;
+      display: block;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.25s;
+    }
+
+    .map-preview:hover {
+      border-color: var(--red);
+    }
+
+    .map-preview:hover .map-overlay-cta {
+      opacity: 1;
+    }
+
+    .map-preview:hover .map-grid {
+      opacity: 0.07;
+    }
+
+    .map-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245, 240, 232, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245, 240, 232, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      transition: opacity 0.3s;
+    }
+
+    .map-dots {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .map-dot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--red);
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(200, 16, 46, 0.6);
+    }
+
+    .map-dot::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 16, 46, 0.3);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+
+      50% {
+        transform: scale(1.8);
+        opacity: 0;
+      }
+    }
+
+    .map-dot:nth-child(2)::after {
+      animation-delay: 0.4s;
+    }
+
+    .map-dot:nth-child(3)::after {
+      animation-delay: 0.8s;
+    }
+
+    .map-dot:nth-child(4)::after {
+      animation-delay: 1.2s;
+    }
+
+    .map-dot:nth-child(5)::after {
+      animation-delay: 1.6s;
+    }
+
+    .map-dot:nth-child(6)::after {
+      animation-delay: 2.0s;
+    }
+
+    .map-overlay-cta {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: rgba(8, 8, 8, 0.55);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .map-overlay-cta span:first-child {
+      font-family: "copperplate", serif;
+      font-size: 28px;
+      letter-spacing: 0.12em;
+      color: var(--white);
+    }
+
+    .map-overlay-cta span:last-child {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+
+    .retailer-link {
+      display: block;
+      text-align: center;
+      margin-top: 28px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--red);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .retailer-link:hover {
+      opacity: 0.7;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(245, 240, 232, 0.1);
+      padding: 60px 48px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-brand .logo-1911 {
+      font-size: 36px;
+    }
+
+    .footer-brand .logo-pipe {
+      height: 36px;
+    }
+
+    .footer-brand .logo-dogwear {
+      font-size: 11px;
+    }
+
+    .footer-brand p {
+      margin-top: 20px;
+      font-family: "copperplate", serif;
+      font-size: 14px;
+      font-style: italic;
+      color: rgba(245, 240, 232, 0.4);
+      line-height: 1.6;
+      max-width: 200px;
+    }
+
+    .footer-col h4 {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 20px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col ul li a {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-brand-logo {
+      height: 36px;
+      width: auto;
+      opacity: 1;
+    }
+
+    .footer-col ul li a:hover {
+      color: var(--white);
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 52px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid rgba(245, 240, 232, 0.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-bottom p {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: rgba(245, 240, 232, 0.25);
+      text-transform: uppercase;
+    }
+
+    .eye-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 80px rgba(120, 60, 20, 0.4));
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 20px 24px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        height: auto;
+        min-height: 0;
+      }
+
+      .hero-video-wrapper {
+        width: 100%;
+        max-height: none;
+      }
+
+      .manifesto {
+        padding: 80px 24px 60px;
+      }
+
+      .divider-logo {
+        margin: 0 24px;
+      }
+
+      .divider-logo-img {
+        height: 110px;
+      }
+
+      .retailer {
+        padding: 60px 24px;
+      }
+
+      footer {
+        padding: 40px 24px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+
+      .footer-brand {
+        grid-column: 1/-1;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+
+    /* ── MUTE TOGGLE ── */
+    .mute-btn {
+      position: absolute;
+      bottom: 32px;
+      right: 36px;
+      z-index: 10;
+      width: 48px;
+      height: 48px;
+      border: 1.5px solid rgba(245, 240, 232, 0.4);
+      border-radius: 50%;
+      background: rgba(8, 8, 8, 0.45);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    }
+
+    .mute-btn:hover {
+      border-color: var(--white);
+      background: rgba(8, 8, 8, 0.7);
+      transform: scale(1.08);
+    }
+
+    .mute-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: var(--white);
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo">
+
+      <img src="logo-1911-laying-white.webp" alt="1911 Dogwear" class="logo-img-stacked">
+
+    </a>
+    <ul class="nav-links">
+     <!-- <li><a href="1911-retailer-map.html">Retailers</a></li>-->
+    </ul>
+  </nav>
+
+  <!-- HERO VIDEO -->
+  <section class="hero">
+    <div class="hero-video-wrapper">
+      <div id="heroYoutube"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <button class="mute-btn" id="muteBtn" aria-label="Toggle sound">
+      <svg id="iconMuted" viewBox="0 0 24 24" fill="none" stroke="var(--white)" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+        <path d="M11 5L6 9H2v6h4l5 4V5z" />
+        <line x1="23" y1="9" x2="17" y2="15" />
+        <line x1="17" y1="9" x2="23" y2="15" />
+      </svg>
+      <svg id="iconSound" viewBox="0 0 24 24" fill="none" stroke="var(--white)" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round" width="18" height="18" style="display:none">
+        <path d="M11 5L6 9H2v6h4l5 4V5z" />
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+      </svg>
+    </button>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto reveal">
+    <div class="section-year">Est. 1911</div>
+    <p>In 1911, <strong>Roald Amundsen</strong> faced the harshest conditions on Earth to become the first human on the
+      South Pole. He succeeded because he trusted his preparation and our gear, crafted with care and built to endure.
+    </p>
+    <p class="accent">Over 100 years later, we continue that same spirit forward.</p>
+    <p>Every stitch, every detail has been refined with passion and precision, so you can trust your gear as much as
+      Amundsen did. Whether you're venturing into the wilderness or approaching everyday life with the same passion for
+      the unknown.</p>
+    <p>Let this be the beginning of your next everyday adventure with your loyal companion.</p>
+    <a href="1911ProductPage.html" class="cta-btn"><span>OUR PRODUCT RANGES</span></a>
+  </section>
+
+  <!-- DIVIDER LOGO -->
+  <div class="divider-logo reveal">
+    <img src="white1911.webp" alt="1911 Dogwear" class="divider-logo-img">
+  </div>
+
+  <!-- RETAILER 
+  <section class="retailer reveal">
+    <h2>Find a Retailer</h2>
+    <p class="sub">Discover a store in your area</p>-->
+
+    <!-- Clickable map preview — links to the full retailer map page 
+    <a href="1911-retailer-map.html" class="map-preview">
+      <div class="map-grid"></div>
+      <div class="map-dots">-->
+        <!-- Approximate positions of Norwegian cities on the preview -->
+        <!--<div class="map-dot" style="left:52%; top:72%;"></div>  -->
+        <!-- <div class="map-dot" style="left:36%; top:66%;"></div> Bergen -->
+        <!-- <div class="map-dot" style="left:53%; top:60%;"></div>  Trondheim -->
+        <!-- <div class="map-dot" style="left:33%; top:75%;"></div>  Stavanger -->
+        <!-- <div class="map-dot" style="left:60%; top:30%;"></div>  Tromsø -->
+        <!-- <div class="map-dot" style="left:46%; top:80%;"></div>  Kristiansand -->
+      <!--</div>
+      <div class="map-overlay-cta">
+        <span>Explore Retailers</span>
+        <span>View interactive map →</span>
+      </div>
+    </a>
+
+    <a href="1911-retailer-map.html" class="retailer-link">Search All Retailers →</a>
+  </section>-->
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-mark">
+          <img src="logo-1911-laying-white.webp" alt="1911 Dogwear" class="footer-brand-logo">
+        </div>
+        <p>From polar peaks to everyday adventure.</p>
+      </div>
+      <div class="footer-col">
+        <h4>1911 Dogwear</h4>
+        <ul>
+          <li><a href="1911ProductPage.html">All Products</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <!--<li><a href="1911-retailer-map.html">Retailers</a></li>-->
+          <li><a href="https://www.gresshoppaaktiv.no">B2B Store</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4></h4>
+        <ul></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+
+    </div>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // Load the YouTube IFrame API
+    const ytScript = document.createElement('script');
+    ytScript.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(ytScript);
+
+    let ytPlayer;
+    const muteBtn = document.getElementById('muteBtn');
+    const iconMuted = document.getElementById('iconMuted');
+    const iconSound = document.getElementById('iconSound');
+
+    function onYouTubeIframeAPIReady() {
+      ytPlayer = new YT.Player('heroYoutube', {
+        videoId: 'uJqrR7vENzg',
+        playerVars: {
+          autoplay: 1,
+          mute: 1,
+          loop: 1,
+          playlist: 'uJqrR7vENzg',
+          controls: 0,
+          showinfo: 0,
+          rel: 0,
+          modestbranding: 1,
+          playsinline: 1,
+          disablekb: 1,
+          iv_load_policy: 3
+        },
+        events: {
+          onReady: (e) => e.target.playVideo()
+        }
+      });
+    }
+
+    muteBtn.addEventListener('click', () => {
+      if (!ytPlayer || typeof ytPlayer.isMuted !== 'function') return;
+      const nowMuted = !ytPlayer.isMuted();
+      if (nowMuted) {
+        ytPlayer.mute();
+      } else {
+        ytPlayer.unMute();
+      }
+      iconMuted.style.display = nowMuted ? 'block' : 'none';
+      iconSound.style.display = nowMuted ? 'none' : 'block';
+    });
+  </script>
+</body>
+
+</html>

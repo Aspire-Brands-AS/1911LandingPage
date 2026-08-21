@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1911 Dogwear — Products</title>
+<link rel="stylesheet" href="https://use.typekit.net/yua3lml.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --red: #C8102E;
+    --white: #F5F0E8;
+    --black: #080808;
+    --muted: #888;
+    --teal: #093a3f;
+  }
+
+  html, body {
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: var(--black);
+    color: var(--white);
+    font-family: "copperplate", serif;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.8) 0%, transparent 100%);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .logo-img-nav {
+    height: 38px;
+    width: auto;
+    display: block;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .nav-links a:hover { opacity: 1; }
+  .nav-links a.active { opacity: 1; border-bottom: 1px solid var(--red); padding-bottom: 2px; }
+
+  /* ── FULL SCREEN STAGE ── */
+  .stage {
+    position: relative;
+    width: 100%;
+  }
+
+  .product-panel {
+    position: relative;
+    width: 100%;
+  }
+
+  .panel-photo {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 66%;
+    background-size: cover;
+    background-position: center;
+    background-color: #141414;
+    filter: saturate(1.08) contrast(1.04);
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .product-panel.active .panel-photo { opacity: 1; transform: scale(1); }
+  .product-panel:not(.active) .panel-photo { transform: scale(1.04); }
+
+  .panel-photo.is-placeholder {
+    background-image: none !important;
+    background: radial-gradient(ellipse at 60% 40%, #1c1c1c 0%, #101010 55%, #080808 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .panel-photo.is-placeholder img {
+    width: 68%;
+    max-width: 480px;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+  }
+
+  .placeholder-tag {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+    white-space: nowrap;
+  }
+
+  .panel-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(8,8,8,1) 0%,
+      rgba(8,8,8,1) 30%,
+      rgba(8,8,8,0.42) 46%,
+      rgba(8,8,8,0.04) 60%,
+      transparent 72%
+    );
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .product-panel.active .panel-overlay { opacity: 1; }
+
+  .panel-num-bg {
+    position: fixed;
+    left: -6px;
+    bottom: 40px;
+    font-family: "copperplate", serif;
+    font-size: clamp(120px, 18vw, 260px);
+    color: rgba(245,240,232,0.045);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    z-index: 1;
+    user-select: none;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .product-panel.active .panel-num-bg { opacity: 1; }
+
+  .panel-content {
+    display: none;
+    position: relative;
+    z-index: 2;
+    flex-direction: column;
+    padding: 100px 5vw 200px 72px;
+    max-width: 40%;
+    min-height: 100vh;
+  }
+
+  .product-panel.active .panel-content {
+    display: flex;
+  }
+
+  .panel-content-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    margin: auto 0;
+  }
+
+  .panel-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--red);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s 0.1s, transform 0.5s 0.1s;
+    position: relative;
+    padding-bottom: 10px;
+    max-width: 300px;
+  }
+
+  .panel-eyebrow::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--teal);
+  }
+
+  .product-panel.active .panel-eyebrow {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .panel-name {
+    font-family: "copperplate", serif;
+    font-size: clamp(40px, 5.4vw, 78px);
+    letter-spacing: 0.03em;
+    line-height: 0.98;
+    color: var(--white);
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.55s 0.18s, transform 0.55s 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .product-panel.active .panel-name {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .panel-desc {
+    font-family: "copperplate", serif;
+    font-size: clamp(13px, 1.3vw, 16px);
+    font-weight: 300;
+    color: rgba(245,240,232,0.68);
+    line-height: 1.6;
+    max-width: 380px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s 0.26s, transform 0.5s 0.26s;
+  }
+
+  .product-panel.active .panel-desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .panel-desc-row {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 18px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s 0.26s, transform 0.5s 0.26s;
+  }
+
+  .product-panel.active .panel-desc-row {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .panel-desc-row .panel-desc {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    margin: 0;
+    flex: 1;
+    min-width: 220px;
+  }
+
+  .panel-product-shot {
+    flex: 0 1 460px;
+    max-width: 100%;
+    min-width: 160px;
+    max-height: 34vh;
+    opacity: 1;
+    transform: none;
+    transition: none;
+    margin: 0;
+  }
+
+  .panel-product-shot img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 34vh;
+    display: block;
+    filter: drop-shadow(0 20px 36px rgba(0,0,0,0.6));
+  }
+
+  .panel-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s 0.32s, transform 0.5s 0.32s;
+  }
+
+  .product-panel.active .panel-features {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .feature-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.85);
+    border: 1px solid rgba(245,240,232,0.22);
+    background: rgba(245,240,232,0.04);
+    padding: 9px 16px;
+    line-height: 1.3;
+    max-width: 100%;
+    min-width: 0;
+    white-space: normal;
+  }
+
+  .panel-colors {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s 0.38s, transform 0.5s 0.38s;
+  }
+
+  .product-panel.active .panel-colors {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .swatch-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid rgba(245,240,232,0.2);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .rrp-inline {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-left: 6px;
+    padding-left: 16px;
+    border-left: 2px solid var(--teal);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+    white-space: nowrap;
+  }
+
+  .rrp-inline .rrp-value {
+    color: var(--red);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  .panel-cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s 0.48s, transform 0.5s 0.48s;
+  }
+
+  .product-panel.active .panel-cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 14px 40px;
+    font-family: "copperplate", serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--white);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.3s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--red);
+    transform: translateX(-101%);
+    transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-primary:hover { color: var(--white); }
+  .btn-primary:hover::before { transform: translateX(0); }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 24px;
+    font-family: "copperplate", serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: transparent;
+    border: 1px solid rgba(245,240,232,0.3);
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
+  }
+
+  .btn-ghost:hover { border-color: var(--white); background: rgba(245,240,232,0.06); }
+
+  /* ── BOTTOM PRODUCT SELECTOR ── */
+  .product-selector {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 300;
+    background: linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.85) 70%, transparent 100%);
+    padding: 20px 48px 28px;
+  }
+
+  .selector-track {
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    max-width: 1400px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(245,240,232,0.18);
+    padding-top: 18px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .selector-item {
+    flex: 1;
+    min-width: 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 0 8px 4px;
+    border-top: 2px solid transparent;
+    transition: border-color 0.25s;
+    position: relative;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .selector-item.active {
+    border-top-color: var(--red);
+  }
+
+  .selector-icon {
+    width: 100%;
+    max-width: 110px;
+    height: 76px;
+    background-color: #0c0c0c;
+    border: 1px solid rgba(245,240,232,0.18);
+    border-radius: 3px;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.85;
+    transition: opacity 0.25s, transform 0.25s, background-color 0.25s, border-color 0.25s;
+  }
+
+  .selector-item.active .selector-icon,
+  .selector-item:hover .selector-icon {
+    opacity: 1;
+    transform: translateY(-4px);
+    background-color: #141414;
+    border-color: rgba(245,240,232,0.4);
+  }
+
+  .selector-name {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    transition: color 0.25s;
+    white-space: nowrap;
+  }
+
+  .selector-item.active .selector-name,
+  .selector-item:hover .selector-name {
+    color: var(--white);
+  }
+
+  @media (max-width: 1300px) {
+    .panel-content {
+      max-width: 46%;
+      padding: 90px 4vw 180px 48px;
+    }
+    .panel-photo { width: 62%; }
+    .panel-name { font-size: clamp(34px, 6vw, 64px); }
+    .panel-desc { max-width: 340px; }
+  }
+
+  @media (max-width: 1000px) {
+    nav { padding: 20px 32px; }
+    .panel-content { max-width: 50%; padding: 84px 3.5vw 170px 36px; gap: 13px; }
+    .panel-photo { width: 58%; }
+    .panel-desc { max-width: 300px; font-size: clamp(12.5px, 1.6vw, 14px); }
+    .feature-pill { font-size: 10px; padding: 8px 13px; }
+    .swatch { width: 34px; height: 34px; }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+
+    html, body { height: auto; overflow: visible; }
+
+    .stage {
+      position: static;
+      width: 100%;
+      height: auto;
+    }
+
+    .product-panel {
+      position: static;
+      display: none;
+      opacity: 1;
+      pointer-events: auto;
+      flex-direction: column;
+    }
+
+    .product-panel.active { display: flex; }
+
+    .panel-content {
+      position: static;
+      order: 1;
+      z-index: auto;
+      max-width: 100%;
+      width: 100%;
+      min-height: auto;
+      padding: 96px 22px 28px;
+      gap: 14px;
+      justify-content: flex-start;
+      overflow: visible;
+    }
+
+    .panel-content-inner {
+      gap: 14px;
+      margin: 0;
+    }
+
+    .panel-eyebrow, .panel-name, .panel-desc, .panel-desc-row, .panel-features, .panel-product-shot, .panel-colors, .panel-cta {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .panel-name { font-size: clamp(34px, 10vw, 52px); }
+    .panel-desc-row { flex-direction: column; gap: 12px; }
+    .panel-desc { max-width: 100%; font-size: 14px; }
+    .panel-eyebrow { max-width: 100%; }
+    .panel-product-shot { flex: none; width: 300px; max-width: 100%; margin: 4px 0; align-self: flex-start; }
+    .feature-pill { font-size: 10.5px; padding: 8px 14px; }
+
+    .panel-photo {
+      position: relative;
+      order: 2;
+      width: 100%;
+      height: 68vw;
+      max-height: 420px;
+      min-height: 240px;
+    }
+
+    .panel-photo.is-placeholder img { width: 58%; }
+
+    .panel-overlay { display: none; }
+    .panel-num-bg { display: none; }
+
+    body { padding-bottom: 150px; overflow-x: hidden; }
+
+    .product-selector { padding: 14px 10px 16px; }
+    .selector-track { gap: 0; padding-top: 12px; }
+    .selector-item { padding: 0 4px 2px; min-width: 62px; }
+    .selector-icon { max-width: 62px; height: 44px; background-size: 80%; }
+    .selector-name { font-size: 7.5px; letter-spacing: 0.1em; }
+
+    .swatch { width: 34px; height: 34px; }
+    .swatch-row { gap: 10px; flex-wrap: wrap; }
+  }
+
+  @media (max-width: 480px) {
+    nav { padding: 14px 16px; }
+    .logo-img-nav { height: 30px; }
+
+    .panel-content { padding: 84px 16px 24px; gap: 12px; }
+    .panel-eyebrow { font-size: 9px; letter-spacing: 0.32em; }
+    .panel-name { font-size: clamp(28px, 11vw, 40px); }
+    .panel-desc { font-size: 13px; line-height: 1.55; }
+    .panel-product-shot { flex: none; width: 220px; max-width: 100%; margin: 2px 0; }
+
+    .panel-features { gap: 8px; }
+    .feature-pill { font-size: 9.5px; padding: 7px 12px; }
+
+    .rrp-inline { font-size: 9px; letter-spacing: 0.22em; padding-left: 12px; margin-left: 2px; }
+    .rrp-inline .rrp-value { font-size: 18px; }
+    .swatch { width: 30px; height: 30px; }
+
+    .btn-primary { padding: 12px 26px; font-size: 10px; }
+    .btn-ghost { padding: 12px 18px; font-size: 10px; }
+
+    .panel-photo { height: 62vw; min-height: 200px; max-height: 320px; }
+    .panel-photo.is-placeholder img { width: 62%; }
+
+    body { padding-bottom: 132px; }
+    .product-selector { padding: 10px 8px 14px; }
+    .selector-item { min-width: 50px; gap: 6px; }
+    .selector-icon { max-width: 50px; height: 36px; }
+    .selector-name { font-size: 6.5px; letter-spacing: 0.06em; }
+  }
+
+  @media (max-width: 340px) {
+    .panel-name { font-size: 26px; }
+    .selector-item { min-width: 44px; }
+    .selector-icon { max-width: 44px; height: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">
+    <img src="logo-1911-laying-white.webp" alt="1911 Dogwear" class="logo-img-nav">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="1911-products.html" class="active">Products</a></li>
+    <li><a href="1911-retailer-map.html">Retailers</a></li>
+  </ul>
+</nav>
+
+<!-- FULL SCREEN STAGE -->
+<div class="stage">
+
+    <!-- PRODUCT 1: NANUQ HARNESS -->
+  <div class="product-panel active" id="panel-1">
+    <div class="panel-photo" style="background-image:url('1911_Nanuq_Harness_Product_Lifestyle.webp'); background-position:center 52%;"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel-num-bg">01</div>
+    <div class="panel-content">
+      <div class="panel-content-inner">
+      <div class="panel-eyebrow">1911 Dogwear — Harness</div>
+      <div class="panel-name">Nanuq<br>Harness</div>
+            <div class="panel-desc-row">
+        <p class="panel-desc">This innovative and ergonomic open-back mid-harness balances performance and comfort for the dog that does it all. With shoulder blades free and back open, it allows your dog to pull correctly - from medium to high pulling point, engaging all their power in the right way. From mantrailing and canicross, to everyday trails, let them lead the way in total freedom. </p>
+        <div class="panel-product-shot">
+        <img src="Nanuq_Harness_Product.webp" alt="Nanuq Harness product shot">
+      </div>
+      </div>
+      <div class="panel-features">
+        <span class="feature-pill">From medium to high intensity activities</span>
+        <span class="feature-pill">Open-back design mid-harness allows full freedom of movement</span>
+        <span class="feature-pill">A secure and stable fit no matter what activity</span>
+        <span class="feature-pill">20.000mm water-resistant polyester outer fabric</span>
+        <span class="feature-pill">Soft breathable mesh padding on the inside of the harness</span>
+        <span class="feature-pill">Reflective details - perfect for use in the dark</span>
+        <span class="feature-pill">4 attachment points secured with Z-stitching</span>
+      </div>
+      <div class="panel-colors">
+        <div class="swatch-row">
+          <span class="swatch" style="background-image:url('Black_Color_Block.webp')" data-color="Black"></span>
+          <span class="swatch" style="background-image:url('Petrol_Color_Block.webp')" data-color="Petrol"></span>
+          <span class="swatch" style="background-image:url('Cerise_Color_Block.webp')" data-color="Cerise"></span>
+          <span class="swatch" style="background-image:url('Khaki_Color_Block.webp')" data-color="Khaki"></span>
+          <span class="rrp-inline">RRP <span class="rrp-value">kr 899–949</span></span>
+        </div>
+      </div>
+      <div class="panel-cta">
+        <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT 2: OBERSTEN HARNESS -->
+  <div class="product-panel" id="panel-2">
+    <div class="panel-photo" style="background-image:url('1911_Obersten_Harness_Product_Lifestyle.webp'); background-position:center 55%;"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel-num-bg">02</div>
+    <div class="panel-content">
+      <div class="panel-content-inner">
+      <div class="panel-eyebrow">1911 Dogwear — Harness</div>
+      <div class="panel-name">Obersten<br>Harness</div>
+      <div class="panel-desc-row">
+        <p class="panel-desc">Our open-back long harness perfectly contours your dog’s body, keeping the shoulder blades free and the back open. This allows your dog to pull efficiently - from low to medium pulling point - using the full strength of their chest. Built for active dogs, the ergonomic design lets them move naturally and perform at their best while you explore together. </p>
+        <div class="panel-product-shot">
+          <img src="Obersten_Harness_Product.webp" alt="Obersten Harness product shot">
+        </div>
+      </div>
+      <div class="panel-features">
+        <span class="feature-pill">From medium to high intensity activities</span>
+        <span class="feature-pill">Open-back design allows full freedom of movement</span>
+        <span class="feature-pill">20.000mm water-resistant polyester outer fabric</span>
+        <span class="feature-pill">Soft breathable mesh on the inside of the harness</span>
+        <span class="feature-pill">Reflective details - perfect for use in the dark</span>
+      </div>
+      <div class="panel-colors">
+        <div class="swatch-row">
+          <span class="swatch" style="background-image:url('Black_Color_Block.webp')" data-color="Black"></span>
+          <span class="swatch" style="background-image:url('Petrol_Color_Block.webp')" data-color="Petrol"></span>
+          <span class="swatch" style="background-image:url('Cerise_Color_Block.webp')" data-color="Cerise"></span>
+          <span class="swatch" style="background-image:url('Khaki_Color_Block.webp')" data-color="Khaki"></span>
+          <span class="rrp-inline">RRP <span class="rrp-value">kr 999–1,049</span></span>
+        </div>
+      </div>
+      <div class="panel-cta">
+        <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
+      </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- PRODUCT 3: RAPP TRAIL BELT -->
+  <div class="product-panel" id="panel-3">
+    <div class="panel-photo" style="background-image:url('1911_Rapp_Trail_Belt_Prodct_Lifestyle.webp'); background-position:center 66%;"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel-num-bg">03</div>
+    <div class="panel-content">
+      <div class="panel-content-inner">
+      <div class="panel-eyebrow">1911 Dogwear — Belt</div>
+      <div class="panel-name">Rapp<br>Trail Belt</div>
+            <div class="panel-desc-row">
+        <p class="panel-desc">The Rapp trail belt is designed to redistribute pulling force to the hips, to help protect your lower back and give you total freedom of movement, so you and your dog move as one on any trail. Adds stability, with an open lower back design that prevents the belt from riding up. </p>
+        <div class="panel-product-shot">
+        <img src="Rapp_Trail_Belt_Product.webp" alt="Rapp Trail Belt product shot">
+      </div>
+      </div>
+      <div class="panel-features">
+        <span class="feature-pill">Practical pocket to fit your essentials</span>
+        <span class="feature-pill">Redistributes pulling force to help protect your lower back</span>
+        <span class="feature-pill">Specially engineered buckle ensures secure fastening and quick, easy release</span>
+        <span class="feature-pill">Reflective details - perfect for use in the dark</span>
+        <span class="feature-pill">20.000mm water-resistant polyester outer fabric</span>
+        <span class="feature-pill">Multiple D-rings make this a multi-activity belt</span>
+        <span class="feature-pill">Adjustable for customized fit</span>
+      </div>
+      <div class="panel-colors">
+        <div class="swatch-row">
+          <span class="swatch" style="background-image:url('Black_Color_Block.webp')" data-color="Black"></span>
+          <span class="swatch" style="background-image:url('Petrol_Color_Block.webp')" data-color="Petrol"></span>
+          <span class="swatch" style="background-image:url('Cerise_Color_Block.webp')" data-color="Cerise"></span>
+          <span class="swatch" style="background-image:url('Khaki_Color_Block.webp')" data-color="Khaki"></span>
+          <span class="rrp-inline">RRP <span class="rrp-value">kr 1,199</span></span>
+        </div>
+      </div>
+      <div class="panel-cta">
+        <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT 4: CLARK RAIN COAT -->
+  <div class="product-panel" id="panel-4">
+    <div class="panel-photo" style="background-image:url('1911_Clark_Rain_Coat_Product_Lifestyle.webp'); background-position:center 72%;"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel-num-bg">04</div>
+    <div class="panel-content">
+      <div class="panel-content-inner">
+      <div class="panel-eyebrow">1911 Dogwear — Coats</div>
+      <div class="panel-name">Clark<br>Rain Coat</div>
+            <div class="panel-desc-row">
+        <p class="panel-desc">Protective coat that shields against rain and rugged conditions, featuring fully taped seams and high-performance water-resistant fabric. Adjustable waist straps ensure a secure, comfortable fit with full freedom of movement. Our innovative dual two-way zippers offer effortless access over a collar, short, mid, or long harness. The coat folds neatly into its integrated pocket </p>
+        <div class="panel-product-shot">
+        <img src="Clark_Rain_Coat_Product.webp" alt="Clark Rain Coat product shot">
+      </div>
+      </div>
+      <div class="panel-features">
+        <span class="feature-pill">All intensity levels</span>
+        <span class="feature-pill">Integrated 2-way waterproof zipper</span>
+        <span class="feature-pill">20.000mm water-resistant polyester outer fabric</span>
+        <span class="feature-pill">Adjustable straps</span>
+        <span class="feature-pill">Duraflex® buckle - contoured to the dog's waist for a comfortable fit</span>
+        <span class="feature-pill">Reflective details - perfect for use in the dark</span>
+      </div>
+      <div class="panel-colors">
+        <div class="swatch-row">
+          <span class="swatch" style="background-image:url('Khaki_Color_Block.webp')" data-color="Khaki"></span>
+          <span class="swatch" style="background-image:url('Black_Color_Block.webp')" data-color="Black"></span>
+          <span class="swatch" style="background-image:url('Petrol_Color_Block.webp')" data-color="Petrol"></span>
+          <span class="swatch" style="background-image:url('Cerise_Color_Block.webp')" data-color="Cerise"></span>
+          <span class="rrp-inline">RRP <span class="rrp-value">kr 1,099–1,199</span></span>
+        </div>
+      </div>
+      <div class="panel-cta">
+       <!-- <a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT 5: POLAR ACTIVE COAT -->
+  <div class="product-panel" id="panel-5">
+    <div class="panel-photo" style="background-image:url('1911_Active_Coat_Product_Lifestyle.webp'); background-position:center 60%;"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel-num-bg">05</div>
+    <div class="panel-content">
+      <div class="panel-content-inner">
+      <div class="panel-eyebrow">1911 Dogwear — Coats</div>
+      <div class="panel-name">Polar<br>Active Coat</div>
+            <div class="panel-desc-row">
+        <p class="panel-desc">A light and insulated winter coat that delivers warmth, protection, and total mobility for active dogs. Featuring our innovative and integrated 2-way waterproof zipper for effortless layering over a short, mid or long harness or collar. Powered by Fellex® ECO‑HSRP insulation, this coat is designed for low to high intensity use and helps to keep your dog comfortable in temperatures down to -44°C - without restricting movement. The coat folds neatly into its integrated pocket. </p>
+        <div class="panel-product-shot">
+        <img src="Polar_Active_Coat_Product.webp" alt="Polar Active Coat product shot">
+      </div>
+      </div>
+      <div class="panel-features">
+        <span class="feature-pill">Integrated 2-way waterproof zipper</span>
+        <span class="feature-pill">Fellex® ECO-HSRP insulation, made for temperatures down to -50°C</span>
+        <span class="feature-pill">Bluesign® approved insulation made with 95% recycled content</span>
+        <span class="feature-pill">20.000mm water-resistant polyester outer fabric</span>
+        <span class="feature-pill">Secure Velcro fastening around neck and waist</span>
+        <span class="feature-pill">Reflective details - perfect for use in the dark</span>
+      </div>
+      <div class="panel-colors">
+        <div class="swatch-row">
+          <span class="swatch" style="background-image:url('Petrol_Color_Block.webp')" data-color="Petrol"></span>
+          <span class="swatch" style="background-image:url('Black_Color_Block.webp')" data-color="Black"></span>
+          <span class="swatch" style="background-image:url('Cerise_Color_Block.webp')" data-color="Cerise"></span>
+          <span class="swatch" style="background-image:url('Khaki_Color_Block.webp')" data-color="Khaki"></span>
+          <span class="rrp-inline">RRP <span class="rrp-value">kr 1,099</span></span>
+        </div>
+      </div>
+      <div class="panel-cta">
+        <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT 6: ARKTIS WARM COAT -->
+  <div class="product-panel" id="panel-6">
+    <div class="panel-photo" style="background-image:url('1911_Arktis_Warm_Coat_Product_Lifestyle.webp'); background-position:center 50%;"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel-num-bg">06</div>
+    <div class="panel-content">
+      <div class="panel-content-inner">
+      <div class="panel-eyebrow">1911 Dogwear — Coats</div>
+      <div class="panel-name">Arktis<br>Warm Coat</div>
+            <div class="panel-desc-row">
+        <p class="panel-desc">A premium winter coat featuring Fellex® ECO-HSRP insulation with extra padding over big muscle groups for exceptional warmth in cold weather conditions. Our innovative dual 2-way zipper offers seamless access over collars or short, mid, and long harnesses. Designed for low to medium-intensity use, with adjustable straps for a tailored fit. The coat folds neatly into its integrated pocket. </p>
+        <div class="panel-product-shot">
+        <img src="Arktis_Warm_Coat_Product.webp" alt="Arktis Warm Coat product shot">
+      </div>
+      </div>
+      <div class="panel-features">
+        <span class="feature-pill">Integrated 2-way waterproof zipper with integrated garage that locks the zipper in place</span>
+        <span class="feature-pill">Fellex® ECO-HSRP insulation made for temperatures down to -44°C</span>
+        <span class="feature-pill">Bluesign® approved insulation made with 95% recycled content</span>
+        <span class="feature-pill">Extra insulated in the thigh area to help protect the major muscles</span>
+        <span class="feature-pill">20.000mm water-resistant polyester outer fabric</span>
+        <span class="feature-pill">Elastic tail strap for a secure fit and cold protection</span>
+        <span class="feature-pill">Reflective details - perfect for use in the dark</span>
+      </div>
+      <div class="panel-colors">
+        <div class="swatch-row">
+          <span class="swatch" style="background-image:url('Cerise_Color_Block.webp')" data-color="Cerise"></span>
+          <span class="swatch" style="background-image:url('Black_Color_Block.webp')" data-color="Black"></span>
+          <span class="swatch" style="background-image:url('Petrol_Color_Block.webp')" data-color="Petrol"></span>
+          <span class="swatch" style="background-image:url('Khaki_Color_Block.webp')" data-color="Khaki"></span>
+          <span class="rrp-inline">RRP <span class="rrp-value">kr 1,249–1,399</span></span>
+        </div>
+      </div>
+      <div class="panel-cta">
+       <!-- <a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
+      </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- PRODUCT 7: ODIN COLLAR -->
+  <div class="product-panel" id="panel-7">
+    <div class="panel-photo" style="background-image:url('1911_Odin_Collar_Product_Lifestyle.webp'); background-position:center 66%;"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel-num-bg">07</div>
+    <div class="panel-content">
+      <div class="panel-content-inner">
+      <div class="panel-eyebrow">1911 Dogwear — Collar</div>
+      <div class="panel-name">Odin<br>Collar</div>
+            <div class="panel-desc-row">
+        <p class="panel-desc">A padded slip collar with a 5 cm slip, offering support, control, and freedom of movement. Water-resistant with breathable mesh, it keeps your dog comfortable and secure on every walk and adventure. </p>
+        <div class="panel-product-shot">
+        <img src="Odin_Collar_Product.webp" alt="Odin Collar product shot">
+      </div>
+      </div>
+      <div class="panel-features">
+        <span class="feature-pill">Padded collar comfortable for all dogs</span>
+        <span class="feature-pill">20.000mm water-resistant polyester outer fabric</span>
+        <span class="feature-pill">Breathable mesh on the inside</span>
+        <span class="feature-pill">Reflective details - perfect for use in the dark</span>
+        <span class="feature-pill">Aluminum D-ring secured with Z-stitching</span>
+      </div>
+      <div class="panel-colors">
+        <div class="swatch-row">
+          <span class="swatch" style="background-image:url('Petrol_Color_Block.webp')" data-color="Petrol"></span>
+          <span class="swatch" style="background-image:url('Black_Color_Block.webp')" data-color="Black"></span>
+          <span class="swatch" style="background-image:url('Cerise_Color_Block.webp')" data-color="Cerise"></span>
+          <span class="swatch" style="background-image:url('Khaki_Color_Block.webp')" data-color="Khaki"></span>
+          <span class="rrp-inline">RRP <span class="rrp-value">kr 299</span></span>
+        </div>
+      </div>
+      <div class="panel-cta">
+        <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT 8: KVIK COLLAR -->
+  <div class="product-panel" id="panel-8">
+    <div class="panel-photo" style="background-image:url('1911_Kvik_Collar_Product_Lifestyle.webp'); background-position:center 52%;"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel-num-bg">08</div>
+    <div class="panel-content">
+      <div class="panel-content-inner">
+      <div class="panel-eyebrow">1911 Dogwear — Collar</div>
+      <div class="panel-name">Kvik<br>Collar</div>
+            <div class="panel-desc-row">
+        <p class="panel-desc">A flat collar that provides security and control while offering maximum support. Water-resistant with breathable mesh, a secure aluminum D-ring, and fully adjustable for the perfect fit on every walk and adventure. </p>
+        <div class="panel-product-shot">
+        <img src="Kvik_Collar_Product.webp" alt="Kvik Collar product shot">
+      </div>
+      </div>
+      <div class="panel-features">
+        <span class="feature-pill">Padded collar comfortable for all dogs</span>
+        <span class="feature-pill">20.000mm water-resistant polyester outer fabric</span>
+        <span class="feature-pill">Breathable mesh on the inside</span>
+        <span class="feature-pill">Adjustable - designed to fit most breeds</span>
+        <span class="feature-pill">Duraflex® buckle - contoured to the dog's neck for a comfortable fit</span>
+        <span class="feature-pill">Reflective details - perfect for use in the dark</span>
+        <span class="feature-pill">Aluminum D-ring secured with Z-stitching</span>
+      </div>
+      <div class="panel-colors">
+        <div class="swatch-row">
+          <span class="swatch" style="background-image:url('Black_Color_Block.webp')" data-color="Black"></span>
+          <span class="swatch" style="background-image:url('Petrol_Color_Block.webp')" data-color="Petrol"></span>
+          <span class="swatch" style="background-image:url('Cerise_Color_Block.webp')" data-color="Cerise"></span>
+          <span class="swatch" style="background-image:url('Khaki_Color_Block.webp')" data-color="Khaki"></span>
+          <span class="rrp-inline">RRP <span class="rrp-value">kr 349</span></span>
+        </div>
+      </div>
+      <div class="panel-cta">
+        <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT 9: REX LEASH -->
+  <div class="product-panel" id="panel-9">
+    <div class="panel-photo" style="background-image:url('1911_Rex_Leash_Product_Lifestyle.webp'); background-position:center 45%;"></div>
+    <div class="panel-overlay"></div>
+    <div class="panel-num-bg">09</div>
+    <div class="panel-content">
+      <div class="panel-content-inner">
+      <div class="panel-eyebrow">1911 Dogwear — Leash</div>
+      <div class="panel-name">Rex<br>Leash</div>
+            <div class="panel-desc-row">
+        <p class="panel-desc">A fully elastic leash that absorbs shocks, protecting both you and your dog from sudden pulls. The multi-directional elastic construction allows the leash to stretch in both directions for optimal flexibility and control. Ideal for running, biking, skiing, or hiking - it combines comfort, control, and security. </p>
+        <div class="panel-product-shot">
+        <img src="Rex_Leash_Product.webp" alt="Rex Leash product shot">
+      </div>
+      </div>
+      <div class="panel-features">
+        <span class="feature-pill">Shock-absorbing bungee to help protect joints</span>
+        <span class="feature-pill">Heavy-duty carabiner - tested for shock loads up to 400 kg</span>
+        <span class="feature-pill">Padded handle for comfort</span>
+        <span class="feature-pill">Perfect for the 1911 Rapp trail belt</span>
+      </div>
+      <div class="panel-colors">
+        <div class="swatch-row">
+          <span class="swatch" style="background-image:url('Black_Color_Block.webp')" data-color="Black"></span>
+          <span class="rrp-inline">RRP <span class="rrp-value">kr 649–699</span></span>
+        </div>
+      </div>
+      <div class="panel-cta">
+        <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
+      </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+</div><!-- /stage -->
+
+<!-- BOTTOM PRODUCT SELECTOR -->
+<div class="product-selector">
+  <div class="selector-track">
+
+    <button class="selector-item active" data-panel="1">
+      <div class="selector-icon" style="background-image:url('Nanuq_Harness_Product.webp')"></div>
+      <span class="selector-name">Nanuq Harness</span>
+    </button>
+
+     <button class="selector-item" data-panel="2">
+      <div class="selector-icon" style="background-image:url('Obersten_Harness_Product.webp')"></div>
+      <span class="selector-name">Obersten Harness</span>
+    </button>
+
+        <button class="selector-item" data-panel="3">
+      <div class="selector-icon" style="background-image:url('Rapp_Trail_Belt_Product.webp')"></div>
+      <span class="selector-name">Rapp Belt</span>
+    </button>
+
+        <button class="selector-item" data-panel="4">
+      <div class="selector-icon" style="background-image:url('Clark_Rain_Coat_Product.webp')"></div>
+      <span class="selector-name">Clark Coat</span>
+    </button>
+
+    <button class="selector-item" data-panel="5">
+      <div class="selector-icon" style="background-image:url('Polar_Active_Coat_Product.webp')"></div>
+      <span class="selector-name">Active Coat</span>
+    </button>
+
+    <button class="selector-item" data-panel="6">
+      <div class="selector-icon" style="background-image:url('Arktis_Warm_Coat_Product.webp')"></div>
+      <span class="selector-name">Arktis Coat</span>
+    </button>
+
+    <button class="selector-item" data-panel="7">
+      <div class="selector-icon" style="background-image:url('Odin_Collar_Product.webp')"></div>
+      <span class="selector-name">Odin Collar</span>
+    </button>
+
+    <button class="selector-item" data-panel="8">
+      <div class="selector-icon" style="background-image:url('Kvik_Collar_Product.webp')"></div>
+      <span class="selector-name">Kvik Collar</span>
+    </button>
+
+    <button class="selector-item" data-panel="9">
+      <div class="selector-icon" style="background-image:url('Rex_Leash_Product.webp')"></div>
+      <span class="selector-name">Rex Leash</span>
+    </button>
+
+   
+
+  </div>
+</div>
+
+<script>
+  const items = document.querySelectorAll('.selector-item');
+  const panels = document.querySelectorAll('.product-panel');
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const panelId = item.dataset.panel;
+
+      items.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+
+      panels.forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + panelId).classList.add('active');
+    });
+  });
+
+</script>
+</body>
+</html>
