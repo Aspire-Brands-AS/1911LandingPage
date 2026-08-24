@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="referrer" content="strict-origin-when-cross-origin" >
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>1911 Dogwear — From Polar Peaks to Everyday Adventure</title>
   <link rel="stylesheet" href="https://use.typekit.net/yua3lml.css">
@@ -830,7 +831,8 @@
           modestbranding: 1,
           playsinline: 1,
           disablekb: 1,
-          iv_load_policy: 3
+          iv_load_policy: 3,
+          origin: window.location.origin
         },
         events: {
           onReady: (e) => e.target.playVideo()
