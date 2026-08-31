@@ -836,9 +836,19 @@
           origin: window.location.origin
         },
         events: {
-          onReady: (e) => e.target.playVideo()
+          onReady: (e) => e.target.playVideo(),
+          onStateChange: onPlayerStateChange
         }
       });
+    }
+
+    // Self-heal: if YouTube ever pauses/ends itself (buffering hiccup,
+    // tab backgrounded, autoplay policy, etc.), immediately resume so the
+    // branded pause overlay never lingers on screen.
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+        event.target.playVideo();
+      }
     }
 
     muteBtn.addEventListener('click', () => {
