@@ -797,66 +797,17 @@
 
     reveals.forEach(el => observer.observe(el));
 
-    // Load the YouTube IFrame API
-    const ytScript = document.createElement('script');
-    ytScript.src = "https://www.youtube.com/iframe_api";
-    document.body.appendChild(ytScript);
-
-    let ytPlayer;
+    const video = document.getElementById('heroVideo');
     const muteBtn = document.getElementById('muteBtn');
     const iconMuted = document.getElementById('iconMuted');
     const iconSound = document.getElementById('iconSound');
 
-    function onYouTubeIframeAPIReady() {
-      ytPlayer = new YT.Player('heroYoutube', {
-        videoId: 'uJqrR7vENzg',
-        playerVars: {
-          autoplay: 1,
-          mute: 1,
-          loop: 1,
-          playlist: 'uJqrR7vENzg',
-          controls: 0,
-          showinfo: 0,
-          rel: 0,
-          modestbranding: 1,
-          playsinline: 1,
-          disablekb: 1,
-          iv_load_policy: 3,
-          origin: window.location.origin
-        },
-        events: {
-          onReady: (e) => e.target.playVideo(),
-          onStateChange: onPlayerStateChange
-        }
-      });
-    }
-
-    // Self-heal: if YouTube ever pauses/ends itself (buffering hiccup,
-    // tab backgrounded, autoplay policy, etc.), immediately resume so the
-    // branded pause overlay never lingers on screen.
-    const heroVideoCover = document.getElementById('heroVideoCover');
-    function onPlayerStateChange(event) {
-      if (event.data === YT.PlayerState.PLAYING) {
-        // Video is confirmed actually playing — safe to reveal it now,
-        // hiding YouTube's title/thumbnail flash that shows during load.
-        heroVideoCover.classList.add('hidden');
-      }
-      if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-        event.target.playVideo();
-      }
-    }
-
     muteBtn.addEventListener('click', () => {
-      if (!ytPlayer || typeof ytPlayer.isMuted !== 'function') return;
-      const nowMuted = !ytPlayer.isMuted();
-      if (nowMuted) {
-        ytPlayer.mute();
-      } else {
-        ytPlayer.unMute();
-      }
-      iconMuted.style.display = nowMuted ? 'block' : 'none';
-      iconSound.style.display = nowMuted ? 'none' : 'block';
+      video.muted = !video.muted;
+      iconMuted.style.display = video.muted ? 'block' : 'none';
+      iconSound.style.display = video.muted ? 'none' : 'block';
     });
+
   </script>
 </body>
 
