@@ -158,6 +158,20 @@
       pointer-events: none;
     }
 
+    .hero-video-cover {
+      position: absolute;
+      inset: 0;
+      background: var(--black);
+      z-index: 2;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .hero-video-cover.hidden {
+      opacity: 0;
+    }
+
     .hero-overlay {
       position: absolute;
       inset: 0;
@@ -700,6 +714,7 @@
   <section class="hero">
     <div class="hero-video-wrapper">
       <div id="heroYoutube"></div>
+      <div class="hero-video-cover" id="heroVideoCover"></div>
     </div>
     <div class="hero-overlay"></div>
     <button class="mute-btn" id="muteBtn" aria-label="Toggle sound">
@@ -845,7 +860,13 @@
     // Self-heal: if YouTube ever pauses/ends itself (buffering hiccup,
     // tab backgrounded, autoplay policy, etc.), immediately resume so the
     // branded pause overlay never lingers on screen.
+    const heroVideoCover = document.getElementById('heroVideoCover');
     function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        // Video is confirmed actually playing — safe to reveal it now,
+        // hiding YouTube's title/thumbnail flash that shows during load.
+        heroVideoCover.classList.add('hidden');
+      }
       if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
         event.target.playVideo();
       }
