@@ -622,13 +622,20 @@
     .panel-overlay { display: none; }
     .panel-num-bg { display: none; }
 
-    body { padding-bottom: 150px; overflow-x: hidden; }
+    body { padding-bottom: 168px; overflow-x: hidden; }
 
     .product-selector { padding: 14px 10px 16px; }
     .selector-track { gap: 0; padding-top: 12px; }
-    .selector-item { padding: 0 4px 2px; min-width: 62px; }
-    .selector-icon { max-width: 62px; height: 44px; background-size: 80%; }
-    .selector-name { font-size: 7.5px; letter-spacing: 0.1em; }
+    .selector-item { padding: 0 4px 2px; min-width: 84px; }
+    .selector-icon { max-width: 84px; height: 62px; background-size: 82%; }
+    .selector-name {
+      font-size: 8px;
+      letter-spacing: 0.08em;
+      white-space: normal;
+      text-align: center;
+      line-height: 1.25;
+      max-width: 84px;
+    }
 
     .swatch { width: 34px; height: 34px; }
     .swatch-row { gap: 10px; flex-wrap: wrap; }
@@ -657,17 +664,25 @@
     .panel-photo { height: 62vw; min-height: 200px; max-height: 320px; }
     .panel-photo.is-placeholder img { width: 62%; }
 
-    body { padding-bottom: 132px; }
+    body { padding-bottom: 140px; }
     .product-selector { padding: 10px 8px 14px; }
-    .selector-item { min-width: 50px; gap: 6px; }
-    .selector-icon { max-width: 50px; height: 36px; }
-    .selector-name { font-size: 6.5px; letter-spacing: 0.06em; }
+    .selector-item { min-width: 68px; gap: 6px; }
+    .selector-icon { max-width: 68px; height: 50px; }
+    .selector-name {
+      font-size: 7px;
+      letter-spacing: 0.05em;
+      white-space: normal;
+      text-align: center;
+      line-height: 1.2;
+      max-width: 68px;
+    }
   }
 
   @media (max-width: 340px) {
     .panel-name { font-size: 26px; }
-    .selector-item { min-width: 44px; }
-    .selector-icon { max-width: 44px; height: 32px; }
+    .selector-item { min-width: 58px; }
+    .selector-icon { max-width: 58px; height: 44px; }
+    .selector-name { font-size: 6.5px; max-width: 58px; }
   }
 </style>
 </head>
