@@ -48,6 +48,12 @@
       justify-content: space-between;
       padding: 28px 48px;
       background: linear-gradient(to bottom, rgba(8, 8, 8, 0.95) 0%, transparent 100%);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    nav.scrolled {
+      background: var(--black);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
     }
 
     .logo {
@@ -807,6 +813,21 @@
       iconMuted.style.display = video.muted ? 'block' : 'none';
       iconSound.style.display = video.muted ? 'none' : 'block';
     });
+
+    // Solid nav background once the user scrolls, so content doesn't show through
+    const navEl = document.querySelector('nav');
+    const scrollThreshold = 40;
+
+    function updateNavBackground() {
+      if (window.scrollY > scrollThreshold) {
+        navEl.classList.add('scrolled');
+      } else {
+        navEl.classList.remove('scrolled');
+      }
+    }
+
+    window.addEventListener('scroll', updateNavBackground, { passive: true });
+    updateNavBackground();
 
   </script>
 </body>
