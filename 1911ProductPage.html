@@ -714,7 +714,7 @@
             <div class="panel-desc-row">
         <p class="panel-desc">This innovative and ergonomic open-back mid-harness balances performance and comfort for the dog that does it all. With shoulder blades free and back open, it allows your dog to pull correctly - from medium to high pulling point, engaging all their power in the right way. From mantrailing and canicross, to everyday trails, let them lead the way in total freedom. </p>
         <div class="panel-product-shot">
-        <img data-src="Nanuq_Harness_Product.webp" alt="Nanuq Harness product shot" loading="lazy">
+        <img data-src="Nanuq_Harness_Product.webp?v=2" alt="Nanuq Harness product shot" loading="lazy">
       </div>
       </div>
       <div class="panel-features">
@@ -910,7 +910,7 @@
             <div class="panel-desc-row">
         <p class="panel-desc">A premium winter coat featuring Fellex® ECO-HSRP insulation with extra padding over big muscle groups for exceptional warmth in cold weather conditions. Our innovative dual 2-way zipper offers seamless access over collars or short, mid, and long harnesses. Designed for low to medium-intensity use, with adjustable straps for a tailored fit. The coat folds neatly into its integrated pocket. </p>
         <div class="panel-product-shot">
-        <img data-src="Arktis_Warm_Coat_Product.webp" alt="Arktis Warm Coat product shot" loading="lazy">
+        <img data-src="Arktis_Warm_Coat_Product.webp?v=2" alt="Arktis Warm Coat product shot" loading="lazy">
       </div>
       </div>
       <div class="panel-features">
@@ -988,7 +988,7 @@
             <div class="panel-desc-row">
         <p class="panel-desc">A flat collar that provides security and control while offering maximum support. Water-resistant with breathable mesh, a secure aluminum D-ring, and fully adjustable for the perfect fit on every walk and adventure. </p>
         <div class="panel-product-shot">
-        <img data-src="Kvik_Collar_Product.webp" alt="Kvik Collar product shot" loading="lazy">
+        <img data-src="Kvik_Collar_Product.webp?v=2" alt="Kvik Collar product shot" loading="lazy">
       </div>
       </div>
       <div class="panel-features">
@@ -1059,7 +1059,7 @@
   <div class="selector-track">
 
     <button class="selector-item active" data-panel="1">
-      <div class="selector-icon" style="background-image:url('Nanuq_Harness_Product.webp')"></div>
+      <div class="selector-icon" style="background-image:url('Nanuq_Harness_Product.webp?v=2')"></div>
       <span class="selector-name">Nanuq Harness</span>
     </button>
 
@@ -1084,7 +1084,7 @@
     </button>
 
     <button class="selector-item" data-panel="6">
-      <div class="selector-icon" style="background-image:url('Arktis_Warm_Coat_Product.webp')"></div>
+      <div class="selector-icon" style="background-image:url('Arktis_Warm_Coat_Product.webp?v=2')"></div>
       <span class="selector-name">Arktis Coat</span>
     </button>
 
@@ -1094,7 +1094,7 @@
     </button>
 
     <button class="selector-item" data-panel="8">
-      <div class="selector-icon" style="background-image:url('Kvik_Collar_Product.webp')"></div>
+      <div class="selector-icon" style="background-image:url('Kvik_Collar_Product.webp?v=2')"></div>
       <span class="selector-name">Kvik Collar</span>
     </button>
 
@@ -1148,18 +1148,24 @@
   items.forEach(item => {
     item.addEventListener('click', () => {
       const panelId = item.dataset.panel;
+      const oldPanel = document.querySelector('.product-panel.active');
+      const newPanel = document.getElementById('panel-' + panelId);
+
+      if (oldPanel === newPanel) return;
+
+
+      setActivePanelPhoto(newPanel);
 
       items.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
 
-      panels.forEach(p => {
-        if (p.classList.contains('active')) clearPanelPhoto(p);
-        p.classList.remove('active');
-      });
-
-      const newPanel = document.getElementById('panel-' + panelId);
+      if (oldPanel) oldPanel.classList.remove('active');
       newPanel.classList.add('active');
-      setActivePanelPhoto(newPanel);
+
+
+      if (oldPanel) {
+        setTimeout(() => clearPanelPhoto(oldPanel), 750);
+      }
     });
   });
 
