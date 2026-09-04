@@ -1145,6 +1145,8 @@
   const initialActive = document.querySelector('.product-panel.active');
   if (initialActive) setActivePanelPhoto(initialActive);
 
+  const isMobileLayout = () => window.matchMedia('(max-width: 900px)').matches;
+
   items.forEach(item => {
     item.addEventListener('click', () => {
       const panelId = item.dataset.panel;
@@ -1153,18 +1155,41 @@
 
       if (oldPanel === newPanel) return;
 
-
-      setActivePanelPhoto(newPanel);
-
       items.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
 
-      if (oldPanel) oldPanel.classList.remove('active');
-      newPanel.classList.add('active');
+      if (isMobileLayout()) {
+        // Mobile panels use display:none/flex in normal document flow (not
+        // the overlapping position:fixed layers desktop uses), so a true
+        // crossfade risks the old and new panel visually stacking mid-
+        // transition. Instead: swap instantly, then fade the new panel's
+        // content in, using a forced reflow so the opacity change from 0
+        // actually animates (display:none -> flex can't itself transition).
+        if (oldPanel) {
+          oldPanel.classList.remove('active');
+          clearPanelPhoto(oldPanel);
+        }
 
+        setActivePanelPhoto(newPanel);
+        newPanel.style.transition = 'none';
+        newPanel.style.opacity = '0';
+        newPanel.classList.add('active');
+        void newPanel.offsetWidth; // force reflow before animating
+        newPanel.style.transition = 'opacity 0.3s ease';
+        newPanel.style.opacity = '1';
+        setTimeout(() => {
+          newPanel.style.opacity = '';
+          newPanel.style.transition = '';
+        }, 320);
 
-      if (oldPanel) {
-        setTimeout(() => clearPanelPhoto(oldPanel), 750);
+      } else {
+        // Desktop: overlapping position:fixed layers crossfade via CSS opacity.
+        setActivePanelPhoto(newPanel);
+        if (oldPanel) oldPanel.classList.remove('active');
+        newPanel.classList.add('active');
+        if (oldPanel) {
+          setTimeout(() => clearPanelPhoto(oldPanel), 750);
+        }
       }
     });
   });
