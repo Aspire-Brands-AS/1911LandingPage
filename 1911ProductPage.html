@@ -706,7 +706,7 @@
 
     <!-- PRODUCT 1: NANUQ HARNESS -->
   <div class="product-panel active" id="panel-1">
-    <div class="panel-photo" style="background-image:url('1911_Nanuq_Harness_Product_Lifestyle.webp'); background-position:center 52%;"></div>
+    <div class="panel-photo" data-bg="1911_Nanuq_Harness_Product_Lifestyle.webp" style="background-position:center 52%;"></div>
     <div class="panel-overlay"></div>
     <div class="panel-num-bg">01</div>
     <div class="panel-content">
@@ -746,7 +746,7 @@
 
   <!-- PRODUCT 2: OBERSTEN HARNESS -->
   <div class="product-panel" id="panel-2">
-    <div class="panel-photo" style="background-image:url('1911_Obersten_Harness_Product_Lifestyle.webp'); background-position:center 55%;"></div>
+    <div class="panel-photo" data-bg="1911_Obersten_Harness_Product_Lifestyle.webp" style="background-position:center 55%;"></div>
     <div class="panel-overlay"></div>
     <div class="panel-num-bg">02</div>
     <div class="panel-content">
@@ -784,7 +784,7 @@
 
     <!-- PRODUCT 3: RAPP TRAIL BELT -->
   <div class="product-panel" id="panel-3">
-    <div class="panel-photo" style="background-image:url('1911_Rapp_Trail_Belt_Prodct_Lifestyle.webp'); background-position:center 66%;"></div>
+    <div class="panel-photo" data-bg="1911_Rapp_Trail_Belt_Prodct_Lifestyle.webp" style="background-position:center 66%;"></div>
     <div class="panel-overlay"></div>
     <div class="panel-num-bg">03</div>
     <div class="panel-content">
@@ -824,7 +824,7 @@
 
   <!-- PRODUCT 4: CLARK RAIN COAT -->
   <div class="product-panel" id="panel-4">
-    <div class="panel-photo" style="background-image:url('1911_Clark_Rain_Coat_Product_Lifestyle.webp'); background-position:center 72%;"></div>
+    <div class="panel-photo" data-bg="1911_Clark_Rain_Coat_Product_Lifestyle.webp" style="background-position:center 72%;"></div>
     <div class="panel-overlay"></div>
     <div class="panel-num-bg">04</div>
     <div class="panel-content">
@@ -863,7 +863,7 @@
 
   <!-- PRODUCT 5: POLAR ACTIVE COAT -->
   <div class="product-panel" id="panel-5">
-    <div class="panel-photo" style="background-image:url('1911_Active_Coat_Product_Lifestyle.webp'); background-position:center 60%;"></div>
+    <div class="panel-photo" data-bg="1911_Active_Coat_Product_Lifestyle.webp" style="background-position:center 60%;"></div>
     <div class="panel-overlay"></div>
     <div class="panel-num-bg">05</div>
     <div class="panel-content">
@@ -902,7 +902,7 @@
 
   <!-- PRODUCT 6: ARKTIS WARM COAT -->
   <div class="product-panel" id="panel-6">
-    <div class="panel-photo" style="background-image:url('1911_Arktis_Warm_Coat_Product_Lifestyle.webp'); background-position:center 50%;"></div>
+    <div class="panel-photo" data-bg="1911_Arktis_Warm_Coat_Product_Lifestyle.webp" style="background-position:center 50%;"></div>
     <div class="panel-overlay"></div>
     <div class="panel-num-bg">06</div>
     <div class="panel-content">
@@ -942,7 +942,7 @@
 
     <!-- PRODUCT 7: ODIN COLLAR -->
   <div class="product-panel" id="panel-7">
-    <div class="panel-photo" style="background-image:url('1911_Odin_Collar_Product_Lifestyle.webp'); background-position:center 66%;"></div>
+    <div class="panel-photo" data-bg="1911_Odin_Collar_Product_Lifestyle.webp" style="background-position:center 66%;"></div>
     <div class="panel-overlay"></div>
     <div class="panel-num-bg">07</div>
     <div class="panel-content">
@@ -980,7 +980,7 @@
 
   <!-- PRODUCT 8: KVIK COLLAR -->
   <div class="product-panel" id="panel-8">
-    <div class="panel-photo" style="background-image:url('1911_Kvik_Collar_Product_Lifestyle.webp'); background-position:center 52%;"></div>
+    <div class="panel-photo" data-bg="1911_Kvik_Collar_Product_Lifestyle.webp" style="background-position:center 52%;"></div>
     <div class="panel-overlay"></div>
     <div class="panel-num-bg">08</div>
     <div class="panel-content">
@@ -1020,7 +1020,7 @@
 
   <!-- PRODUCT 9: REX LEASH -->
   <div class="product-panel" id="panel-9">
-    <div class="panel-photo" style="background-image:url('1911_Rex_Leash_Product_Lifestyle.webp'); background-position:center 45%;"></div>
+    <div class="panel-photo" data-bg="1911_Rex_Leash_Product_Lifestyle.webp" style="background-position:center 45%;"></div>
     <div class="panel-overlay"></div>
     <div class="panel-num-bg">09</div>
     <div class="panel-content">
@@ -1114,6 +1114,27 @@
   const items = document.querySelectorAll('.selector-item');
   const panels = document.querySelectorAll('.product-panel');
 
+  // Only load/decode the background photo for the active panel at any time.
+  // This avoids Safari/iOS holding 9 full-size fixed-position photos in memory
+  // simultaneously, which can crash the page on lower-memory devices.
+  function setActivePanelPhoto(panel) {
+    const photo = panel.querySelector('.panel-photo');
+    if (photo && photo.dataset.bg) {
+      photo.style.backgroundImage = `url('${photo.dataset.bg}')`;
+    }
+  }
+
+  function clearPanelPhoto(panel) {
+    const photo = panel.querySelector('.panel-photo');
+    if (photo) {
+      photo.style.backgroundImage = 'none';
+    }
+  }
+
+  // Set the initially active panel's photo on load
+  const initialActive = document.querySelector('.product-panel.active');
+  if (initialActive) setActivePanelPhoto(initialActive);
+
   items.forEach(item => {
     item.addEventListener('click', () => {
       const panelId = item.dataset.panel;
@@ -1121,8 +1142,14 @@
       items.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
 
-      panels.forEach(p => p.classList.remove('active'));
-      document.getElementById('panel-' + panelId).classList.add('active');
+      panels.forEach(p => {
+        if (p.classList.contains('active')) clearPanelPhoto(p);
+        p.classList.remove('active');
+      });
+
+      const newPanel = document.getElementById('panel-' + panelId);
+      newPanel.classList.add('active');
+      setActivePanelPhoto(newPanel);
     });
   });
 
