@@ -534,6 +534,32 @@
     color: var(--white);
   }
 
+  /* ── ASPECT-RATIO CROP FIX ──
+     .panel-photo is a fixed box sized top:0/right:0/bottom:0/width:66%,
+     so its aspect ratio depends entirely on the viewport shape, not just
+     its width. A single background-position works for "normal" screens
+     but crops badly at the extremes:
+       - very wide/short viewports (ultrawide monitors) crop the top/bottom
+       - very tall/narrow viewports crop the left/right
+     These rules nudge background-position per panel based on viewport
+     aspect ratio, without touching layout, sizing, or breakpoints below. */
+
+  @media (min-aspect-ratio: 2/1) {
+    #panel-1 .panel-photo { background-position: center 30% !important; }
+    #panel-2 .panel-photo { background-position: center 35% !important; }
+    #panel-3 .panel-photo { background-position: center 45% !important; }
+    #panel-4 .panel-photo { background-position: center 55% !important; }
+    #panel-5 .panel-photo { background-position: center 40% !important; }
+    #panel-6 .panel-photo { background-position: center 30% !important; }
+    #panel-7 .panel-photo { background-position: center 45% !important; }
+    #panel-8 .panel-photo { background-position: center 35% !important; }
+    #panel-9 .panel-photo { background-position: center 30% !important; }
+  }
+
+  @media (max-aspect-ratio: 4/5) {
+    .panel-photo { background-position: center center !important; }
+  }
+
   @media (max-width: 1300px) {
     .panel-content {
       max-width: 46%;
