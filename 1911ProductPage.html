@@ -89,8 +89,20 @@
 
   .panel-photo {
     position: fixed;
-    top: 0; right: 0; bottom: 0;
+    top: 50%;
+    right: 0;
     width: 66%;
+    /* Height defaults to 100vh, but is clamped between 30vw and 73vw so the
+       box's own aspect ratio (66vw wide) never strays far from a typical
+       photo's aspect ratio. Without this, a very tall viewport makes the
+       box very tall too, forcing background-size:cover to zoom in hard
+       enough to crop the subject out; a very wide/short viewport does the
+       same in the other direction. Centering via top:50%/translateY(-50%)
+       means when the clamp kicks in, the box just floats centered with
+       black showing above/below (or is allowed to overflow off-screen
+       top/bottom) instead of distorting the crop. */
+    height: clamp(30vw, 100vh, 73vw);
+    transform: translateY(-50%);
     background-size: cover;
     background-position: center;
     background-color: #141414;
@@ -101,8 +113,8 @@
     transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .product-panel.active .panel-photo { opacity: 1; transform: scale(1); }
-  .product-panel:not(.active) .panel-photo { transform: scale(1.04); }
+  .product-panel.active .panel-photo { opacity: 1; transform: translateY(-50%) scale(1); }
+  .product-panel:not(.active) .panel-photo { transform: translateY(-50%) scale(1.04); }
 
   .panel-photo.is-placeholder {
     background-image: none !important;
@@ -534,32 +546,6 @@
     color: var(--white);
   }
 
-  /* ── ASPECT-RATIO CROP FIX ──
-     .panel-photo is a fixed box sized top:0/right:0/bottom:0/width:66%,
-     so its aspect ratio depends entirely on the viewport shape, not just
-     its width. A single background-position works for "normal" screens
-     but crops badly at the extremes:
-       - very wide/short viewports (ultrawide monitors) crop the top/bottom
-       - very tall/narrow viewports crop the left/right
-     These rules nudge background-position per panel based on viewport
-     aspect ratio, without touching layout, sizing, or breakpoints below. */
-
-  @media (min-aspect-ratio: 2/1) {
-    #panel-1 .panel-photo { background-position: center 30% !important; }
-    #panel-2 .panel-photo { background-position: center 35% !important; }
-    #panel-3 .panel-photo { background-position: center 45% !important; }
-    #panel-4 .panel-photo { background-position: center 55% !important; }
-    #panel-5 .panel-photo { background-position: center 40% !important; }
-    #panel-6 .panel-photo { background-position: center 30% !important; }
-    #panel-7 .panel-photo { background-position: center 45% !important; }
-    #panel-8 .panel-photo { background-position: center 35% !important; }
-    #panel-9 .panel-photo { background-position: center 30% !important; }
-  }
-
-  @media (max-aspect-ratio: 4/5) {
-    .panel-photo { background-position: center center !important; }
-  }
-
   @media (max-width: 1300px) {
     .panel-content {
       max-width: 46%;
@@ -635,11 +621,19 @@
 
     .panel-photo {
       position: relative;
+      top: auto;
+      right: auto;
       order: 2;
       width: 100%;
       height: 68vw;
       max-height: 420px;
       min-height: 240px;
+      transform: none;
+    }
+
+    .product-panel.active .panel-photo,
+    .product-panel:not(.active) .panel-photo {
+      transform: none;
     }
 
     .panel-photo.is-placeholder img { width: 58%; }
