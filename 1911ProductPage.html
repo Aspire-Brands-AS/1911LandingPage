@@ -619,10 +619,11 @@
       max-height: 420px;
       min-height: 240px;
       transform: none;
-      /* This box is already landscape-shaped (wide and short), close to
-         the photos' own aspect ratio, so cover crops very little here —
-         no need for the letterbox fallback used in the two-column layout. */
-      background-size: cover;
+      /* Letterboxed for the same reason as the two-column layout: even
+         a landscape-shaped box doesn't always match the photo's own
+         aspect ratio or the subject's position within it, so contain
+         guarantees nothing gets cropped out here either. */
+      background-size: contain;
     }
 
     .product-panel.active .panel-photo,
