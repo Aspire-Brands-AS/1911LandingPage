@@ -1075,42 +1075,42 @@
   <div class="selector-track">
 
     <button class="selector-item active" data-panel="1">
-      <div class="selector-icon" style="background-image:url('Nanuq_Harness_Khaki.webp')"></div>
+      <div class="selector-icon" style="background-image:url('Nanuq_Harness_Product.webp?v=2')"></div>
       <span class="selector-name">Nanuq Harness</span>
     </button>
 
      <button class="selector-item" data-panel="2">
-      <div class="selector-icon" style="background-image:url('Obersten_Harness_Petrol.webp')"></div>
+      <div class="selector-icon" style="background-image:url('Obersten_Harness_Product.webp')"></div>
       <span class="selector-name">Obersten Harness</span>
     </button>
 
         <button class="selector-item" data-panel="3">
-      <div class="selector-icon" style="background-image:url('Rapp_Trail_Belt_Black.webp')"></div>
+      <div class="selector-icon" style="background-image:url('Rapp_Trail_Belt_Product.webp')"></div>
       <span class="selector-name">Rapp Belt</span>
     </button>
 
         <button class="selector-item" data-panel="4">
-      <div class="selector-icon" style="background-image:url('Clark_Rain_Coat_Cerise.webp')"></div>
+      <div class="selector-icon" style="background-image:url('Clark_Rain_Coat_Product.webp')"></div>
       <span class="selector-name">Clark Coat</span>
     </button>
 
     <button class="selector-item" data-panel="5">
-      <div class="selector-icon" style="background-image:url('Polar_Active_Warm_Coat_Khaki.webp')"></div>
+      <div class="selector-icon" style="background-image:url('Polar_Active_Coat_Product.webp')"></div>
       <span class="selector-name">Active Coat</span>
     </button>
 
     <button class="selector-item" data-panel="6">
-      <div class="selector-icon" style="background-image:url('Arktis_Warm_Coat_Petrol.webp')"></div>
+      <div class="selector-icon" style="background-image:url('Arktis_Warm_Coat_Product.webp?v=2')"></div>
       <span class="selector-name">Arktis Coat</span>
     </button>
 
     <button class="selector-item" data-panel="7">
-      <div class="selector-icon" style="background-image:url('Odin_Collar_Cerise.webp')"></div>
+      <div class="selector-icon" style="background-image:url('Odin_Collar_Product.webp')"></div>
       <span class="selector-name">Odin Collar</span>
     </button>
 
     <button class="selector-item" data-panel="8">
-      <div class="selector-icon" style="background-image:url('Kvik_Collar_Khaki.webp')"></div>
+      <div class="selector-icon" style="background-image:url('Kvik_Collar_Product.webp?v=2')"></div>
       <span class="selector-name">Kvik Collar</span>
     </button>
 
@@ -1185,10 +1185,16 @@
     });
   });
 
-  // Default: highlight the first swatch in each row on load.
+  // Default: highlight whichever swatch matches the color already shown
+  // in the starting product photo. The generic "_Product.webp" files each
+  // panel loads with are all the Khaki variant, so that's the default —
+  // not just "whichever swatch happens to be listed first" (swatch order
+  // differs per product and doesn't always start with Khaki).
   document.querySelectorAll('.swatch-row').forEach(row => {
-    const first = row.querySelector('.swatch');
-    if (first) first.classList.add('selected');
+    const swatches = row.querySelectorAll('.swatch');
+    let match = row.querySelector('.swatch[data-color="Khaki"]');
+    if (!match && swatches.length) match = swatches[0];
+    if (match) match.classList.add('selected');
   });
 </script>
 </body>
