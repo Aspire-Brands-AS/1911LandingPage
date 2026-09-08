@@ -103,7 +103,13 @@
        top/bottom) instead of distorting the crop. */
     height: clamp(30vw, 100vh, 73vw);
     transform: translateY(-50%);
-    background-size: cover;
+    /* Letterboxed rather than cropped: the two-column box's aspect ratio
+       still won't always match a landscape photo exactly, so instead of
+       zooming in and losing part of the dog, the full photo is shown with
+       dark bars filling any leftover space. The stacked layout below
+       1300px overrides this back to cover, since its box is already
+       landscape-shaped and doesn't need it. */
+    background-size: contain;
     background-position: center;
     background-color: #141414;
     filter: saturate(1.08) contrast(1.04);
@@ -546,28 +552,11 @@
     color: var(--white);
   }
 
+  /* Below 1300px, skip straight to the full-width stacked layout (photo
+     under text, photo box naturally landscape-shaped) instead of trying
+     to keep two columns going in a shrinking window — that squeezed
+     range was where laptops kept losing the dog's head to cropping. */
   @media (max-width: 1300px) {
-    .panel-content {
-      max-width: 46%;
-      padding: 90px 4vw 180px 48px;
-    }
-    .panel-photo { width: 62%; }
-    .panel-name { font-size: clamp(34px, 6vw, 64px); }
-    .panel-desc { max-width: 340px; }
-    .panel-features { max-width: calc(30vw - 48px); }
-  }
-
-  @media (max-width: 1000px) {
-    nav { padding: 20px 32px; }
-    .panel-content { max-width: 50%; padding: 84px 3.5vw 170px 36px; gap: 13px; }
-    .panel-photo { width: 58%; }
-    .panel-desc { max-width: 300px; font-size: clamp(12.5px, 1.6vw, 14px); }
-    .feature-pill { font-size: 10px; padding: 8px 13px; }
-    .swatch { width: 34px; height: 34px; }
-    .panel-features { max-width: calc(30vw - 36px); }
-  }
-
-  @media (max-width: 900px) {
     nav { padding: 18px 24px; }
     .nav-links { display: none; }
 
@@ -629,6 +618,10 @@
       max-height: 420px;
       min-height: 240px;
       transform: none;
+      /* This box is already landscape-shaped (wide and short), close to
+         the photos' own aspect ratio, so cover crops very little here —
+         no need for the letterbox fallback used in the two-column layout. */
+      background-size: cover;
     }
 
     .product-panel.active .panel-photo,
