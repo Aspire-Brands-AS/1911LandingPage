@@ -252,19 +252,21 @@
       text-align: center;
     }
 
-    /* "Est. 1911" eyebrow label — was 10px, hard to read as an opening
-       line. Bumped up along with a touch more spacing around it. */
+    /* "Est. 1911" eyebrow label — sized up to read as a real opening
+       statement (roughly matching the reference screenshot) rather than
+       fine print, with letter-spacing eased back a touch so it doesn't
+       spread too wide at the larger size. */
     .section-year {
-      font-size: 13px;
+      font-size: 24px;
       font-weight: 600;
-      letter-spacing: 0.38em;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--red);
-      margin-bottom: 40px;
+      margin-bottom: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: 20px;
     }
 
     .section-year::before,
@@ -736,6 +738,18 @@
 
       .manifesto {
         padding: 80px 24px 60px;
+      }
+
+      .section-year {
+        font-size: 18px;
+        letter-spacing: 0.22em;
+        gap: 14px;
+        margin-bottom: 32px;
+      }
+
+      .section-year::before,
+      .section-year::after {
+        width: 24px;
       }
 
       .divider-logo {
