@@ -301,8 +301,12 @@
     max-height: 34vh;
     display: block;
     filter: drop-shadow(0 20px 36px rgba(0,0,0,0.6));
-    /* Smooth crossfade when a color swatch swaps this image out. */
-    transition: opacity 0.18s ease;
+    /* Smooth crossfade when a color swatch swaps this image out. Slowed
+       down and paired with a transitionend-driven swap in the JS below
+       (rather than a guessed setTimeout) so the fade actually completes
+       before the new image appears, instead of cutting over early and
+       reading as a jump. */
+    transition: opacity 0.32s ease;
   }
 
   .panel-features {
@@ -885,7 +889,7 @@
     <div class="panel-content">
       <div class="panel-content-inner">
       <div class="panel-eyebrow">1911 Dogwear — Coats</div>
-      <div class="panel-name">Polar<br>Polar Coat</div>
+      <div class="panel-name">Polar<br>Active Coat</div>
             <div class="panel-desc-row">
         <p class="panel-desc">A light and insulated winter coat that delivers warmth, protection, and total mobility for active dogs. Featuring our innovative and integrated 2-way waterproof zipper for effortless layering over a short, mid or long harness or collar. Powered by Fellex® ECO‑HSRP insulation, this coat is designed for low to high intensity use and helps to keep your dog comfortable in temperatures down to -44°C - without restricting movement. The coat folds neatly into its integrated pocket. </p>
         <div class="panel-product-shot">
