@@ -287,7 +287,15 @@
     flex: 0 1 460px;
     max-width: 100%;
     min-width: 160px;
-    max-height: 34vh;
+    /* Fixed height (not just a max) so the box itself never resizes when
+       a color swatch swaps in a photo with slightly different pixel
+       dimensions — that mismatch, not just the fade timing, was the
+       actual source of the jump. The image is centered inside this
+       constant box and scales down to fit it via object-fit below. */
+    height: 34vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     opacity: 1;
     transform: none;
     transition: none;
@@ -1166,6 +1174,12 @@
   // matching color variant and shows a ring on the selected swatch.
   // Each swatch carries its target image in data-img (set per product,
   // per color, in the markup above).
+  //
+  // The swap itself waits for the fade-out transition to actually finish
+  // (via 'transitionend') rather than guessing with a fixed setTimeout —
+  // a mistimed guess is what made the color change look like a jump
+  // instead of a fade. A fallback timer covers the rare case where the
+  // transitionend event doesn't fire (e.g. the tab was backgrounded).
   document.querySelectorAll('.swatch[data-img]').forEach(swatch => {
     swatch.addEventListener('click', () => {
       const row = swatch.closest('.swatch-row');
@@ -1176,18 +1190,32 @@
 
       const panel = swatch.closest('.product-panel');
       const shotImg = panel ? panel.querySelector('.panel-product-shot img') : null;
-      if (shotImg) {
-        const newSrc = swatch.dataset.img;
-        const newColor = swatch.dataset.color;
-        shotImg.style.opacity = '0';
-        setTimeout(() => {
-          shotImg.src = newSrc;
-          if (newColor) {
-            shotImg.alt = shotImg.alt.replace(/\s*—\s*\w+$/, '') + ' — ' + newColor;
-          }
-          shotImg.style.opacity = '1';
-        }, 180);
-      }
+      if (!shotImg) return;
+
+      const newSrc = swatch.dataset.img;
+      const newColor = swatch.dataset.color;
+      if (shotImg.getAttribute('src') === newSrc) return; // already showing this color
+
+      let swapped = false;
+      const swapNow = () => {
+        if (swapped) return;
+        swapped = true;
+        shotImg.src = newSrc;
+        if (newColor) {
+          shotImg.alt = shotImg.alt.replace(/\s*—\s*\w+$/, '') + ' — ' + newColor;
+        }
+        // Force a reflow so the browser registers the new (still opacity:0)
+        // frame before animating back to opacity:1 — without this the
+        // fade-in can get skipped since the src swap and the opacity
+        // change would otherwise land in the same paint.
+        void shotImg.offsetWidth;
+        shotImg.style.opacity = '1';
+      };
+
+      shotImg.addEventListener('transitionend', swapNow, { once: true });
+      shotImg.style.opacity = '0';
+      // Fallback in case transitionend never fires for some reason.
+      setTimeout(swapNow, 400);
     });
   });
 
