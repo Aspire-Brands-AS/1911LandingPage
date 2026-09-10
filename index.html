@@ -166,6 +166,50 @@
       opacity: 1;
     }
 
+    /* ── MOBILE NAV TOGGLE ── */
+    /* Hidden on desktop; shown only under the 768px breakpoint where
+       .nav-links switches from an inline list to a slide-in panel. */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      margin-top: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 110;
+      position: relative;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 100%;
+      height: 1.5px;
+      background: var(--white);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+    }
+
+    nav.nav-open .nav-toggle span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    nav.nav-open .nav-toggle span:nth-child(2) {
+      opacity: 0;
+    }
+
+    nav.nav-open .nav-toggle span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    .nav-backdrop {
+      display: none;
+    }
+
     /* ── HERO ── */
     .hero {
       position: relative;
@@ -625,8 +669,54 @@
         padding: 20px 24px;
       }
 
+      .nav-toggle {
+        display: flex;
+      }
+
+      /* Slide-in panel instead of the desktop inline list. Sits above the
+         page content, off-screen to the right until nav.nav-open. */
       .nav-links {
-        display: none;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 32px;
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        height: 100svh;
+        width: min(75vw, 300px);
+        padding: 0 40px;
+        background: var(--black);
+        box-shadow: -12px 0 40px rgba(0, 0, 0, 0.5);
+        transform: translateX(100%);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 105;
+      }
+
+      nav.nav-open .nav-links {
+        transform: translateX(0);
+      }
+
+      .nav-links a {
+        font-size: 13px;
+      }
+
+      .nav-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        z-index: 90;
+      }
+
+      nav.nav-open + .nav-backdrop {
+        opacity: 1;
+        pointer-events: auto;
       }
 
       .hero {
@@ -721,12 +811,18 @@
       <img src="logo-1911-laying-white.webp" alt="1911 Dogwear" class="logo-img-stacked">
 
     </a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinksList">
      <!-- <li><a href="1911-retailer-map.html">Retailers</a></li>-->
       <li><a href="1911ProductPage.html">Our Range</a></li>
       <li><a href="1911-faq.html">FAQ</a></li>
     </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navLinksList">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
+  <div class="nav-backdrop" id="navBackdrop"></div>
 
   <!-- HERO VIDEO -->
   <section class="hero">
@@ -764,10 +860,7 @@
     <a href="1911ProductPage.html" class="cta-btn"><span>OUR PRODUCT RANGES</span></a>
   </section>
 
-  <!-- DIVIDER LOGO -->
-  <div class="divider-logo reveal">
-    <img src="white1911.webp" alt="1911 Dogwear" class="divider-logo-img">
-  </div>
+ 
 
   <!-- RETAILER 
   <section class="retailer reveal">
@@ -866,6 +959,32 @@
 
     window.addEventListener('scroll', updateNavBackground, { passive: true });
     updateNavBackground();
+
+    // ── MOBILE NAV TOGGLE ──
+    const navToggle = document.getElementById('navToggle');
+    const navBackdrop = document.getElementById('navBackdrop');
+
+    function setNavOpen(open) {
+      navEl.classList.toggle('nav-open', open);
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+
+    navToggle.addEventListener('click', () => {
+      setNavOpen(!navEl.classList.contains('nav-open'));
+    });
+
+    navBackdrop.addEventListener('click', () => setNavOpen(false));
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => setNavOpen(false));
+    });
+
+    // Close the panel if the viewport is resized back up to desktop width
+    // while it's open, so it doesn't get stuck open behind the scenes.
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) setNavOpen(false);
+    });
 
   </script>
 </body>
