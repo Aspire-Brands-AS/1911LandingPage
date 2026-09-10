@@ -111,25 +111,54 @@
       padding-left: 2px;
     }
 
+    /* Nav links now match the rest of the site's nav typography instead of
+       borrowing the big hero .cta-btn pill — a small red underline on
+       hover/active gives them the same accent treatment used elsewhere
+       (e.g. the "Products" underline on the product page) without the
+       oversized white button box. */
     .nav-links {
       display: flex;
-      gap: 36px;
+      align-items: center;
+      gap: 40px;
       list-style: none;
-      padding-top: 6px;
+      padding-top: 8px;
     }
 
     .nav-links a {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 7px;
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.25em;
+      font-weight: 700;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--white);
       text-decoration: none;
-      opacity: 0.75;
+      opacity: 0.7;
       transition: opacity 0.2s;
     }
 
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 1.5px;
+      background: var(--red);
+      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
     .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-links a.active {
       opacity: 1;
     }
 
@@ -681,15 +710,15 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#" class="logo">
+    <a href="index.html" class="logo">
 
       <img src="logo-1911-laying-white.webp" alt="1911 Dogwear" class="logo-img-stacked">
 
     </a>
     <ul class="nav-links">
      <!-- <li><a href="1911-retailer-map.html">Retailers</a></li>-->
-      <li><a href="1911ProductPage.html" class="cta-btn"><span>OUR RANGE</span></a></li>
-      <li><a href="" class="cta-btn"><span>FAQ</span></a></li>
+      <li><a href="1911ProductPage.html">Our Range</a></li>
+      <li><a href="1911-faq.html">FAQ</a></li>
     </ul>
   </nav>
 
@@ -778,6 +807,7 @@
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
+          <li><a href="1911-faq.html">FAQ</a></li>
           <!--<li><a href="1911-retailer-map.html">Retailers</a></li>-->
           <li><a href="https://www.gresshoppaaktiv.no">B2B Store</a></li>
         </ul>
