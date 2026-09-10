@@ -196,10 +196,12 @@
     margin: auto 0;
   }
 
+  /* Category eyebrow ("1911 Dogwear — Harness" etc.) — bumped up so it
+     reads as a clear label rather than fine print above the product name. */
   .panel-eyebrow {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.5em;
+    letter-spacing: 0.42em;
     text-transform: uppercase;
     color: var(--red);
     opacity: 0;
@@ -226,9 +228,11 @@
     transform: translateY(0);
   }
 
+  /* Product name — scaled down a bit so it sits closer to the eyebrow
+     above it instead of dominating by such a wide margin. */
   .panel-name {
     font-family: "copperplate", serif;
-    font-size: clamp(40px, 5.4vw, 78px);
+    font-size: clamp(32px, 4.6vw, 62px);
     letter-spacing: 0.03em;
     line-height: 0.98;
     color: var(--white);
@@ -617,7 +621,7 @@
       transform: none !important;
     }
 
-    .panel-name { font-size: clamp(34px, 10vw, 52px); }
+    .panel-name { font-size: clamp(28px, 8vw, 44px); }
     .panel-desc-row { flex-direction: column; gap: 12px; }
     .panel-desc { max-width: 100%; font-size: 14px; }
     .panel-eyebrow { max-width: 100%; }
@@ -675,8 +679,8 @@
     .logo-img-nav { height: 30px; }
 
     .panel-content { padding: 84px 16px 24px; gap: 12px; }
-    .panel-eyebrow { font-size: 9px; letter-spacing: 0.32em; }
-    .panel-name { font-size: clamp(28px, 11vw, 40px); }
+    .panel-eyebrow { font-size: 11px; letter-spacing: 0.3em; }
+    .panel-name { font-size: clamp(24px, 9vw, 34px); }
     .panel-desc { font-size: 13px; line-height: 1.55; }
     .panel-product-shot { flex: none; width: 220px; max-width: 100%; margin: 2px 0; }
 
@@ -712,7 +716,7 @@
   }
 
   @media (max-width: 340px) {
-    .panel-name { font-size: 26px; }
+    .panel-name { font-size: 22px; }
     .selector-item { min-width: 58px; }
     .selector-icon { max-width: 58px; height: 44px; }
     .selector-name { font-size: 6.5px; max-width: 58px; min-height: 16px; }
