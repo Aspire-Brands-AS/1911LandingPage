@@ -504,17 +504,9 @@
     gap: 10px;
     cursor: pointer;
     padding: 0 8px 4px;
-    border-top: 2px solid transparent;
-    transition: border-color 0.25s;
     position: relative;
     background: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
-  }
-
-  .selector-item.active {
-    border-top-color: var(--red);
+    border: none;
   }
 
   .selector-icon {
@@ -528,7 +520,7 @@
     background-repeat: no-repeat;
     background-position: center;
     opacity: 0.85;
-    transition: opacity 0.25s, transform 0.25s, background-color 0.25s, border-color 0.25s;
+    transition: opacity 0.25s, transform 0.25s, background-color 0.25s, border-color 0.25s, border-bottom-color 0.25s;
   }
 
   .selector-item.active .selector-icon,
@@ -537,6 +529,16 @@
     transform: translateY(-4px);
     background-color: #141414;
     border-color: rgba(245,240,232,0.4);
+  }
+
+  /* The active indicator now lives here — a red line under the icon box,
+     just above the label — instead of a border across the top of the
+     whole selector item. Declared after the shared active/hover rule
+     above so it wins on the bottom edge specifically; hover alone still
+     only whitens the border, no red. */
+  .selector-item.active .selector-icon {
+    border-bottom-width: 2px;
+    border-bottom-color: var(--red);
   }
 
   .selector-name {
@@ -883,7 +885,7 @@
     <div class="panel-content">
       <div class="panel-content-inner">
       <div class="panel-eyebrow">1911 Dogwear — Coats</div>
-      <div class="panel-name">Polar<br>Active Coat</div>
+      <div class="panel-name">Polar<br>Polar Coat</div>
             <div class="panel-desc-row">
         <p class="panel-desc">A light and insulated winter coat that delivers warmth, protection, and total mobility for active dogs. Featuring our innovative and integrated 2-way waterproof zipper for effortless layering over a short, mid or long harness or collar. Powered by Fellex® ECO‑HSRP insulation, this coat is designed for low to high intensity use and helps to keep your dog comfortable in temperatures down to -44°C - without restricting movement. The coat folds neatly into its integrated pocket. </p>
         <div class="panel-product-shot">
@@ -1185,7 +1187,11 @@
     });
   });
 
-
+  // Default: highlight whichever swatch matches the color already shown
+  // in each panel's starting product photo. This reads the img's actual
+  // src rather than assuming a color, since each product now starts on
+  // a different color — so it stays correct automatically even if the
+  // starting photo is changed again later.
   document.querySelectorAll('.product-panel').forEach(panel => {
     const shotImg = panel.querySelector('.panel-product-shot img');
     const row = panel.querySelector('.swatch-row');
