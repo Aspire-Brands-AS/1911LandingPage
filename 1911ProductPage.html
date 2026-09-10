@@ -1179,14 +1179,16 @@
   // Each swatch carries its target image in data-img (set per product,
   // per color, in the markup above).
   //
-  // This is a true crossfade rather than fade-out-then-fade-in: a
-  // temporary overlay image with the new color is placed exactly on top
-  // of the current one and faded to full opacity, so the old photo stays
-  // visible underneath the entire time — there's never a gap where
-  // neither image is shown. Once the overlay finishes fading in (fully
-  // covering the old photo), the base image is silently swapped to the
-  // new src underneath it and the overlay is removed — invisible, since
-  // at that instant they're showing the same picture.
+  // These are transparent-background cutout photos, not solid rectangles,
+  // and the color variants aren't pixel-aligned to each other — stacking
+  // one on top of the other for a true crossfade let the old photo show
+  // through the transparent parts of the new one, looking like two
+  // separate pictures overlapping instead of a blend. So this fades a
+  // single image out, then in, rather than layering two images at once.
+  // The new photo is preloaded in the background during the fade-out so
+  // it's already cached and ready to paint instantly once swapped in —
+  // no load-lag flash, and the swap itself is driven by the transition
+  // actually completing (not a guessed delay) so it doesn't cut early.
   document.querySelectorAll('.swatch[data-img]').forEach(swatch => {
     swatch.addEventListener('click', () => {
       const row = swatch.closest('.swatch-row');
@@ -1195,9 +1197,8 @@
       }
       swatch.classList.add('selected');
 
-      const shotWrap = swatch.closest('.product-panel')?.querySelector('.panel-product-shot');
-      const shotImg = shotWrap ? shotWrap.querySelector('img') : null;
-      if (!shotWrap || !shotImg) return;
+      const shotImg = swatch.closest('.product-panel')?.querySelector('.panel-product-shot img');
+      if (!shotImg) return;
 
       const newSrc = swatch.dataset.img;
       const newColor = swatch.dataset.color;
@@ -1207,49 +1208,24 @@
         ? shotImg.alt.replace(/\s*—\s*\w+$/, '') + ' — ' + newColor
         : shotImg.alt;
 
-      // Remove any overlay left over from a rapid double-click before starting a new one.
-      shotWrap.querySelectorAll('img.fade-overlay').forEach(el => el.remove());
+      const preloader = new Image();
+      preloader.src = newSrc;
 
-      const overlay = document.createElement('img');
-      overlay.className = 'fade-overlay';
-      overlay.alt = '';
-      overlay.setAttribute('aria-hidden', 'true');
-      overlay.style.position = 'absolute';
-      overlay.style.inset = '0';
-      overlay.style.width = '100%';
-      overlay.style.height = '100%';
-      overlay.style.objectFit = 'contain';
-      overlay.style.filter = getComputedStyle(shotImg).filter;
-      overlay.style.opacity = '0';
-      overlay.style.transition = 'opacity 0.32s ease';
-      overlay.style.pointerEvents = 'none';
-      overlay.src = newSrc;
-
-      let finished = false;
-      const finish = () => {
-        if (finished) return;
-        finished = true;
+      let swapped = false;
+      const swapNow = () => {
+        if (swapped) return;
+        swapped = true;
         shotImg.src = newSrc;
         shotImg.alt = newAlt;
-        overlay.remove();
+        // Force a reflow so the browser registers the new (still
+        // opacity:0) frame before animating back to opacity:1.
+        void shotImg.offsetWidth;
+        shotImg.style.opacity = '1';
       };
 
-      const startFade = () => {
-        // Force a reflow so the browser registers opacity:0 before
-        // animating to 1 — otherwise the fade-in can get skipped.
-        void overlay.offsetWidth;
-        overlay.style.opacity = '1';
-        overlay.addEventListener('transitionend', finish, { once: true });
-        setTimeout(finish, 500); // fallback if transitionend never fires
-      };
-
-      shotWrap.appendChild(overlay);
-      if (overlay.complete) {
-        startFade();
-      } else {
-        overlay.addEventListener('load', startFade, { once: true });
-        overlay.addEventListener('error', finish, { once: true }); // don't get stuck if the image 404s
-      }
+      shotImg.addEventListener('transitionend', swapNow, { once: true });
+      shotImg.style.opacity = '0';
+      setTimeout(swapNow, 420); // fallback if transitionend never fires
     });
   });
 
