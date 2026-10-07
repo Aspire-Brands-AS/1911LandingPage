@@ -450,6 +450,171 @@
       letter-spacing: 0.03em;
     }
 
+    /* ── SIZE GUIDE (expands below the features) ── */
+    .size-guide {
+      max-width: 520px;
+      margin-top: 18px;
+      border-top: 1px solid rgba(245, 240, 232, 0.18);
+      border-bottom: 1px solid rgba(245, 240, 232, 0.18);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s 0.44s, transform 0.5s 0.44s;
+      /* keeps the opened guide clear of the fixed product selector when
+       it scrolls into view */
+      scroll-margin-bottom: 190px;
+    }
+
+    .product-panel.active .size-guide {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .size-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: none;
+      border: none;
+      padding: 18px 0;
+      font-family: "copperplate", serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--red);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .size-toggle:hover {
+      color: #e01a3a;
+    }
+
+    .size-toggle:focus-visible {
+      outline: 1px solid var(--white);
+      outline-offset: 4px;
+    }
+
+    /* plus that turns into a minus when open */
+    .size-toggle-icon {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .size-toggle-icon::before,
+    .size-toggle-icon::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 18px;
+      height: 2px;
+      margin-top: -1px;
+      background: currentColor;
+      transition: transform 0.3s ease, background 0.2s;
+    }
+
+    .size-toggle-icon::after {
+      transform: rotate(90deg);
+    }
+
+    .size-guide.open .size-toggle-icon::after {
+      transform: rotate(0deg);
+    }
+
+    .size-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .size-guide.open .size-body {
+      grid-template-rows: 1fr;
+    }
+
+    .size-body-inner {
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .size-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 4px 0 22px;
+    }
+
+    .size-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: "copperplate", serif;
+    }
+
+    .size-table th {
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.5);
+      padding: 6px 16px 10px 0;
+      border-bottom: 1px solid rgba(245, 240, 232, 0.3);
+    }
+
+    .size-table td {
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      color: rgba(245, 240, 232, 0.82);
+      padding: 8px 16px 8px 0;
+      border-bottom: 1px solid rgba(245, 240, 232, 0.1);
+      white-space: nowrap;
+    }
+
+    .size-table td:first-child {
+      width: 72px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .size-table tbody tr:hover {
+      background: rgba(245, 240, 232, 0.04);
+    }
+
+    .size-note {
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(245, 240, 232, 0.6);
+      padding-left: 14px;
+      border-left: 2px solid var(--teal);
+    }
+
+    /* Measuring illustration on the left, product on the right — same
+     arrangement as the printed size charts. */
+    .size-visuals {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 6px;
+    }
+
+    .size-visuals img {
+      display: block;
+      max-height: 190px;
+      max-width: 48%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .size-visuals .size-product {
+      filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.6));
+    }
+
     .panel-cta {
       display: flex;
       gap: 12px;
@@ -613,6 +778,15 @@
       color: var(--white);
     }
 
+    @media (prefers-reduced-motion: reduce) {
+
+      .size-body,
+      .size-toggle-icon::before,
+      .size-toggle-icon::after {
+        transition: none;
+      }
+    }
+
     @media (max-width: 1300px) {
       nav {
         padding: 18px 24px;
@@ -675,6 +849,7 @@
       .panel-features,
       .panel-product-shot,
       .panel-colors,
+      .size-guide,
       .panel-cta {
         opacity: 1 !important;
         transform: none !important;
@@ -834,6 +1009,35 @@
         padding: 7px 12px;
       }
 
+      .size-guide {
+        margin-top: 12px;
+      }
+
+      .size-toggle {
+        font-size: 15px;
+        letter-spacing: 0.24em;
+        padding: 16px 0;
+      }
+
+      .size-table th {
+        font-size: 9px;
+        letter-spacing: 0.16em;
+        padding-right: 10px;
+      }
+
+      .size-table td {
+        font-size: 13px;
+        padding: 7px 10px 7px 0;
+      }
+
+      .size-table td:first-child {
+        width: 52px;
+      }
+
+      .size-visuals img {
+        max-height: 140px;
+      }
+
       .rrp-inline {
         font-size: 9px;
         letter-spacing: 0.22em;
@@ -985,6 +1189,42 @@
             <span class="feature-pill">From medium to high intensity activities</span>
             <span class="feature-pill">Perfect for Rex Bungee Leash</span>
           </div>
+          <div class="size-guide">
+            <button type="button" class="size-toggle" aria-expanded="false" aria-controls="size-1">
+              Size guide <span class="size-toggle-icon" aria-hidden="true"></span>
+            </button>
+            <div class="size-body" id="size-1" inert>
+              <div class="size-body-inner">
+                <div class="size-content">
+                  <table class="size-table">
+                    <thead>
+                      <tr><th>Size</th><th>Weight</th><th>Half neck girth</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>0</td><td>7–11 kg</td><td>18–19 cm</td></tr>
+                      <tr><td>1</td><td>9–13 kg</td><td>19–20 cm</td></tr>
+                      <tr><td>2</td><td>11–15 kg</td><td>20–21 cm</td></tr>
+                      <tr><td>3</td><td>13–17 kg</td><td>21–22 cm</td></tr>
+                      <tr><td>4</td><td>16–21 kg</td><td>22–23 cm</td></tr>
+                      <tr><td>5</td><td>19–24 kg</td><td>23–24 cm</td></tr>
+                      <tr><td>6</td><td>23–26 kg</td><td>24–25 cm</td></tr>
+                      <tr><td>7</td><td>25–28 kg</td><td>25–26 cm</td></tr>
+                      <tr><td>8</td><td>27–32 kg</td><td>26–27 cm</td></tr>
+                      <tr><td>9</td><td>30–35 kg</td><td>27–28 cm</td></tr>
+                      <tr><td>10</td><td>32–38 kg</td><td>28–29 cm</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="size-note">Measure from the top of the dog's chest, just above the breastbone, up to where
+                    the neck begins.</p>
+                  <div class="size-visuals">
+                    <img src="Nanuq_Harness_Size_Guide.webp" alt="Where to measure the half neck girth on your dog"
+                      loading="lazy">
+                    <img class="size-product" src="Nanuq_Harness_Black.webp" alt="Nanuq Harness" loading="lazy">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="panel-cta">
             <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
           </div>
@@ -1032,6 +1272,43 @@
             <span class="feature-pill">20.000mm water-resistant polyester outer fabric</span>
             <span class="feature-pill">From medium to high intensity activities</span>
             <span class="feature-pill">Perfect for Rex Bungee Leash</span>
+          </div>
+          <div class="size-guide">
+            <button type="button" class="size-toggle" aria-expanded="false" aria-controls="size-2">
+              Size guide <span class="size-toggle-icon" aria-hidden="true"></span>
+            </button>
+            <div class="size-body" id="size-2" inert>
+              <div class="size-body-inner">
+                <div class="size-content">
+                  <table class="size-table">
+                    <thead>
+                      <tr><th>Size</th><th>Weight</th><th>Half neck girth</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>0</td><td>7–11 kg</td><td>18 cm</td></tr>
+                      <tr><td>1</td><td>9–13 kg</td><td>19 cm</td></tr>
+                      <tr><td>2</td><td>11–15 kg</td><td>20 cm</td></tr>
+                      <tr><td>3</td><td>13–17 kg</td><td>21 cm</td></tr>
+                      <tr><td>4</td><td>16–21 kg</td><td>22 cm</td></tr>
+                      <tr><td>5</td><td>19–24 kg</td><td>23 cm</td></tr>
+                      <tr><td>6</td><td>23–26 kg</td><td>24 cm</td></tr>
+                      <tr><td>7</td><td>25–28 kg</td><td>25 cm</td></tr>
+                      <tr><td>8</td><td>27–32 kg</td><td>26 cm</td></tr>
+                      <tr><td>9</td><td>30–35 kg</td><td>27 cm</td></tr>
+                      <tr><td>10</td><td>32–38 kg</td><td>28 cm</td></tr>
+                      <tr><td>11</td><td>35–40 kg</td><td>29 cm</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="size-note">Measure from the top of the dog's chest, just above the breastbone, up to where
+                    the neck begins.</p>
+                  <div class="size-visuals">
+                    <img src="Obersten_Harness_Size_Guide.webp" alt="Where to measure the half neck girth on your dog"
+                      loading="lazy">
+                    <img class="size-product" src="Obersten_Harness_Black.webp" alt="Obersten Harness" loading="lazy">
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="panel-cta">
             <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
@@ -1083,6 +1360,33 @@
             <span class="feature-pill">Adjustable for customized fit</span>
             <span class="feature-pill">Perfect for Rex Bungee Leash</span>
           </div>
+          <div class="size-guide">
+            <button type="button" class="size-toggle" aria-expanded="false" aria-controls="size-3">
+              Size guide <span class="size-toggle-icon" aria-hidden="true"></span>
+            </button>
+            <div class="size-body" id="size-3" inert>
+              <div class="size-body-inner">
+                <div class="size-content">
+                  <table class="size-table">
+                    <thead>
+                      <tr><th>Size</th><th>Hip circumference</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>S</td><td>70–100 cm</td></tr>
+                      <tr><td>M</td><td>85–125 cm</td></tr>
+                      <tr><td>L</td><td>94–145 cm</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="size-note">Measure around your hips, at the height where you'll wear the belt.</p>
+                  <div class="size-visuals">
+                    <img src="Rapp_Trail_Belt_Size_Guide.webp" alt="Where to measure your hip circumference"
+                      loading="lazy">
+                    <img class="size-product" src="Rapp_Trail_Belt_Black.webp" alt="Rapp Trail Belt" loading="lazy">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="panel-cta">
             <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
           </div>
@@ -1132,6 +1436,41 @@
             <span class="feature-pill">All intensity levels</span>
             <span class="feature-pill">Adjustable straps</span>
           </div>
+          <div class="size-guide">
+            <button type="button" class="size-toggle" aria-expanded="false" aria-controls="size-4">
+              Size guide <span class="size-toggle-icon" aria-hidden="true"></span>
+            </button>
+            <div class="size-body" id="size-4" inert>
+              <div class="size-body-inner">
+                <div class="size-content">
+                  <table class="size-table">
+                    <thead>
+                      <tr><th>Size</th><th>Back length</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>24</td><td>22–26 cm</td></tr>
+                      <tr><td>27</td><td>25–29 cm</td></tr>
+                      <tr><td>30</td><td>28–32 cm</td></tr>
+                      <tr><td>33</td><td>31–35 cm</td></tr>
+                      <tr><td>36</td><td>33–39 cm</td></tr>
+                      <tr><td>40</td><td>37–43 cm</td></tr>
+                      <tr><td>45</td><td>42–48 cm</td></tr>
+                      <tr><td>50</td><td>47–53 cm</td></tr>
+                      <tr><td>55</td><td>52–58 cm</td></tr>
+                      <tr><td>60</td><td>57–63 cm</td></tr>
+                      <tr><td>65</td><td>65–68 cm</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="size-note">Measure along the back, from the base of the neck to the base of the tail.</p>
+                  <div class="size-visuals">
+                    <img src="Clark_Rain_Coat_Size_Guide.webp" alt="Where to measure the back length on your dog"
+                      loading="lazy">
+                    <img class="size-product" src="Clark_Rain_Coat_Black.webp" alt="Clark Rain Coat" loading="lazy">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="panel-cta">
             <!-- <a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
           </div>
@@ -1180,6 +1519,37 @@
             <span class="feature-pill">Reflective details - perfect for use in the dark</span>
             <span class="feature-pill">20.000mm water-resistant polyester outer fabric</span>
             <span class="feature-pill">Secure Velcro fastening around neck and waist</span>
+          </div>
+          <div class="size-guide">
+            <button type="button" class="size-toggle" aria-expanded="false" aria-controls="size-5">
+              Size guide <span class="size-toggle-icon" aria-hidden="true"></span>
+            </button>
+            <div class="size-body" id="size-5" inert>
+              <div class="size-body-inner">
+                <div class="size-content">
+                  <table class="size-table">
+                    <thead>
+                      <tr><th>Size</th><th>Back length</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>2XS</td><td>35–45 cm</td></tr>
+                      <tr><td>XS</td><td>40–50 cm</td></tr>
+                      <tr><td>S</td><td>45–55 cm</td></tr>
+                      <tr><td>M</td><td>50–60 cm</td></tr>
+                      <tr><td>L</td><td>55–65 cm</td></tr>
+                      <tr><td>XL</td><td>60–70 cm</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="size-note">Measure along the back, from the base of the neck to the base of the tail.</p>
+                  <div class="size-visuals">
+                    <img src="Polar_Active_Coat_Size_Guide.webp" alt="Where to measure the back length on your dog"
+                      loading="lazy">
+                    <img class="size-product" src="Polar_Active_Warm_Coat_Black.webp" alt="Polar Active Coat"
+                      loading="lazy">
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="panel-cta">
             <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
@@ -1232,6 +1602,41 @@
             <span class="feature-pill">Reflective details - perfect for use in the dark</span>
             <span class="feature-pill">20.000mm water-resistant polyester outer fabric</span>
           </div>
+          <div class="size-guide">
+            <button type="button" class="size-toggle" aria-expanded="false" aria-controls="size-6">
+              Size guide <span class="size-toggle-icon" aria-hidden="true"></span>
+            </button>
+            <div class="size-body" id="size-6" inert>
+              <div class="size-body-inner">
+                <div class="size-content">
+                  <table class="size-table">
+                    <thead>
+                      <tr><th>Size</th><th>Back length</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>24</td><td>22–26 cm</td></tr>
+                      <tr><td>27</td><td>25–29 cm</td></tr>
+                      <tr><td>30</td><td>28–32 cm</td></tr>
+                      <tr><td>33</td><td>31–35 cm</td></tr>
+                      <tr><td>36</td><td>33–39 cm</td></tr>
+                      <tr><td>40</td><td>37–43 cm</td></tr>
+                      <tr><td>45</td><td>42–48 cm</td></tr>
+                      <tr><td>50</td><td>47–53 cm</td></tr>
+                      <tr><td>55</td><td>52–58 cm</td></tr>
+                      <tr><td>60</td><td>57–63 cm</td></tr>
+                      <tr><td>65</td><td>65–68 cm</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="size-note">Measure along the back, from the base of the neck to the base of the tail.</p>
+                  <div class="size-visuals">
+                    <img src="Arktis_Warm_Coat_Size_Guide.webp" alt="Where to measure the back length on your dog"
+                      loading="lazy">
+                    <img class="size-product" src="Arktis_Winter_Coat_Black.webp" alt="Arktis Warm Coat" loading="lazy">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="panel-cta">
             <!-- <a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
           </div>
@@ -1276,6 +1681,36 @@
             <span class="feature-pill">Aluminum D-ring secured with Z-stitching</span>
             <span class="feature-pill">Padded collar comfortable for all dogs</span>
             <span class="feature-pill">Breathable mesh on the inside</span>
+          </div>
+          <div class="size-guide">
+            <button type="button" class="size-toggle" aria-expanded="false" aria-controls="size-7">
+              Size guide <span class="size-toggle-icon" aria-hidden="true"></span>
+            </button>
+            <div class="size-body" id="size-7" inert>
+              <div class="size-body-inner">
+                <div class="size-content">
+                  <table class="size-table">
+                    <thead>
+                      <tr><th>Size</th><th>Neck circumference</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>2</td><td>30–35 cm</td></tr>
+                      <tr><td>3</td><td>35–40 cm</td></tr>
+                      <tr><td>4</td><td>40–45 cm</td></tr>
+                      <tr><td>5</td><td>45–50 cm</td></tr>
+                      <tr><td>6</td><td>50–55 cm</td></tr>
+                      <tr><td>7</td><td>55–60 cm</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="size-note">Measure around the middle of the neck, where the collar will sit.</p>
+                  <div class="size-visuals">
+                    <img src="Odin_Collar_Size_Guide.webp" alt="Where to measure the neck circumference on your dog"
+                      loading="lazy">
+                    <img class="size-product" src="Odin_Collar_Black.webp" alt="Odin Collar" loading="lazy">
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="panel-cta">
             <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
@@ -1323,6 +1758,34 @@
             <span class="feature-pill">Aluminum D-ring secured with Z-stitching</span>
             <span class="feature-pill">Padded collar comfortable for all dogs</span>
             <span class="feature-pill">Breathable mesh on the inside</span>
+          </div>
+          <div class="size-guide">
+            <button type="button" class="size-toggle" aria-expanded="false" aria-controls="size-8">
+              Size guide <span class="size-toggle-icon" aria-hidden="true"></span>
+            </button>
+            <div class="size-body" id="size-8" inert>
+              <div class="size-body-inner">
+                <div class="size-content">
+                  <table class="size-table">
+                    <thead>
+                      <tr><th>Size</th><th>Neck circumference</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>2</td><td>26–33 cm</td></tr>
+                      <tr><td>3</td><td>33–40 cm</td></tr>
+                      <tr><td>4</td><td>40–50 cm</td></tr>
+                      <tr><td>5</td><td>50–60 cm</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="size-note">Measure around the middle of the neck, where the collar will sit.</p>
+                  <div class="size-visuals">
+                    <img src="Kvik_Collar_Size_Guide.webp" alt="Where to measure the neck circumference on your dog"
+                      loading="lazy">
+                    <img class="size-product" src="Kvik_Collar_Black.webp" alt="Kvik Collar" loading="lazy">
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="panel-cta">
             <!--<a href="1911-retailer-map.html" class="btn-ghost">Find a Retailer</a>-->
@@ -1431,6 +1894,36 @@
     const items = document.querySelectorAll('.selector-item');
     const panels = document.querySelectorAll('.product-panel');
 
+    // ── SIZE GUIDE ──
+    // Expands below the features. When opened it scrolls just enough to
+    // bring the chart into view (scroll-margin keeps it above the fixed
+    // product selector).
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function setSizeGuide(guide, open) {
+      const btn = guide.querySelector('.size-toggle');
+      const body = guide.querySelector('.size-body');
+      guide.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) {
+        body.removeAttribute('inert');
+      } else {
+        body.setAttribute('inert', '');
+      }
+    }
+
+    document.querySelectorAll('.size-guide').forEach(guide => {
+      guide.querySelector('.size-toggle').addEventListener('click', () => {
+        const open = !guide.classList.contains('open');
+        setSizeGuide(guide, open);
+        if (open) {
+          setTimeout(() => {
+            guide.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+          }, reduceMotion ? 0 : 420);
+        }
+      });
+    });
+
     items.forEach(item => {
       item.addEventListener('click', () => {
         const panelId = item.dataset.panel;
@@ -1440,6 +1933,9 @@
 
         panels.forEach(p => p.classList.remove('active'));
         document.getElementById('panel-' + panelId).classList.add('active');
+
+        // Each product starts with its size guide closed
+        document.querySelectorAll('.size-guide.open').forEach(g => setSizeGuide(g, false));
       });
     });
 
