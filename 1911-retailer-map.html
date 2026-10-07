@@ -523,20 +523,31 @@ function fitToRetailers() {
 /* The sync job normally adds lat/lng. If a retailer arrives without a position
    (e.g. before the first full sync), look it up once in Kartverket's address
    service and keep it for this browser session. */
+async function lookup(params) {
+  const url = 'https://ws.geonorge.no/adresser/v1/sok?' + new URLSearchParams(Object.assign({ treffPerSide: 1, utkoordsys: 4258 }, params));
+  const res = await fetch(url);
+  const data = await res.json();
+  const hit = data.adresser && data.adresser[0] && data.adresser[0].representasjonspunkt;
+  return hit ? { lat: hit.lat, lng: hit.lon } : null;
+}
+
 async function fillMissingPositions() {
-  const missing = RETAILERS.filter(r => !hasPos(r) && r.street && r.postcode);
+  const missing = RETAILERS.filter(r => !hasPos(r) && r.postcode);
   for (const r of missing) {
     const key = 'pos:' + r.street + '|' + r.postcode;
     let pos = null;
     try { pos = JSON.parse(sessionStorage.getItem(key) || 'null'); } catch (e) {}
     if (!pos) {
-      try {
-        const url = 'https://ws.geonorge.no/adresser/v1/sok?' + new URLSearchParams({ sok: r.street, postnummer: r.postcode, treffPerSide: 1, utkoordsys: 4258 });
-        const res = await fetch(url);
-        const data = await res.json();
-        const hit = data.adresser && data.adresser[0] && data.adresser[0].representasjonspunkt;
-        if (hit) { pos = { lat: hit.lat, lng: hit.lon }; try { sessionStorage.setItem(key, JSON.stringify(pos)); } catch (e) {} }
-      } catch (e) { /* leave it off the map */ }
+      const streetOnly = (r.street || '').replace(/\s+\d+\s*[a-zA-Z]?\s*$/, '').trim();
+      const attempts = [];
+      if (r.street) attempts.push({ sok: r.street, postnummer: r.postcode });           // exact address
+      if (streetOnly && streetOnly !== r.street) attempts.push({ sok: streetOnly, postnummer: r.postcode }); // street, any number
+      attempts.push({ postnummer: r.postcode });                                        // postcode area (approximate)
+      for (const a of attempts) {
+        try { pos = await lookup(a); } catch (e) { pos = null; }
+        if (pos) break;
+      }
+      if (pos) { try { sessionStorage.setItem(key, JSON.stringify(pos)); } catch (e) {} }
     }
     if (pos) { r.lat = pos.lat; r.lng = pos.lng; addMarker(r); }
   }
