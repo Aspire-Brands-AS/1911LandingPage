@@ -442,11 +442,14 @@
       transition: border-color 0.25s;
     }
 
-    .map-preview:hover {
+    .map-preview:hover,
+    .map-preview:focus-visible {
       border-color: var(--red);
+      outline: none;
     }
 
-    .map-preview:hover .map-overlay-cta {
+    .map-preview:hover .map-overlay-cta,
+    .map-preview:focus-visible .map-overlay-cta {
       opacity: 1;
     }
 
@@ -464,18 +467,41 @@
       transition: opacity 0.3s;
     }
 
+    .map-outline {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .map-outline path {
+      fill: rgba(245, 240, 232, 0.035);
+      stroke: rgba(245, 240, 232, 0.22);
+      stroke-width: 1.5;
+      stroke-linejoin: round;
+      vector-effect: non-scaling-stroke;
+      transition: stroke 0.3s, fill 0.3s;
+    }
+
+    .map-preview:hover .map-outline path,
+    .map-preview:focus-visible .map-outline path {
+      stroke: rgba(245, 240, 232, 0.35);
+      fill: rgba(245, 240, 232, 0.05);
+    }
+
     .map-dots {
       position: absolute;
       inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
+    /* Each dot is centred on its position (left/top set by the script
+       from the retailer's coordinates). */
     .map-dot {
       position: absolute;
       width: 8px;
       height: 8px;
+      margin: -4px 0 0 -4px;
       background: var(--red);
       border-radius: 50%;
       box-shadow: 0 0 12px rgba(200, 16, 46, 0.6);
@@ -488,6 +514,7 @@
       border-radius: 50%;
       border: 1px solid rgba(200, 16, 46, 0.3);
       animation: pulse 2.4s ease-in-out infinite;
+      animation-delay: var(--pulse-delay, 0s);
     }
 
     @keyframes pulse {
@@ -504,24 +531,20 @@
       }
     }
 
-    .map-dot:nth-child(2)::after {
-      animation-delay: 0.4s;
+    .map-count {
+      position: absolute;
+      left: 20px;
+      bottom: 16px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.45);
     }
 
-    .map-dot:nth-child(3)::after {
-      animation-delay: 0.8s;
-    }
-
-    .map-dot:nth-child(4)::after {
-      animation-delay: 1.2s;
-    }
-
-    .map-dot:nth-child(5)::after {
-      animation-delay: 1.6s;
-    }
-
-    .map-dot:nth-child(6)::after {
-      animation-delay: 2.0s;
+    .map-count strong {
+      color: var(--red);
+      font-weight: 700;
     }
 
     .map-overlay-cta {
@@ -551,6 +574,15 @@
       letter-spacing: 0.35em;
       text-transform: uppercase;
       color: var(--red);
+    }
+
+    /* Touch screens have no hover: show the call to action straight away */
+    @media (hover: none) {
+      .map-overlay-cta {
+        opacity: 1;
+        background: rgba(8, 8, 8, 0.35);
+        backdrop-filter: none;
+      }
     }
 
     .retailer-link {
@@ -829,6 +861,13 @@
       stroke-linecap: round;
       stroke-linejoin: round;
     }
+
+    /* Respect "reduce motion" in the visitor's device settings */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .map-dot::after { animation: none; }
+      .reveal { transition: none; opacity: 1; transform: none; }
+    }
   </style>
 </head>
 
@@ -843,7 +882,7 @@
 
       </a>
       <ul class="nav-links" id="navLinksList">
-       <!-- <li><a href="1911-retailer-map.html">Retailers</a></li>-->
+        <li><a href="1911-retailer-map.html">Retailers</a></li>
         <li><a href="1911ProductPage.html">Our Range</a></li>
       </ul>
     </div>
@@ -891,25 +930,29 @@
     <a href="1911ProductPage.html" class="cta-btn"><span>Our product range</span></a>
   </section>
 
- 
-
-  <!-- RETAILER 
   <section class="retailer reveal">
     <h2>Find a Retailer</h2>
-    <p class="sub">Discover a store in your area</p>-->
+    <p class="sub">Discover a store in your area</p>
 
-    <!-- Clickable map preview — links to the full retailer map page 
-    <a href="1911-retailer-map.html" class="map-preview">
+    <!-- Clickable map preview — links to the full retailer map page.
+         The dots are drawn from retailers.json (the same list the map uses).
+         The six dots below are only shown if that list can't be loaded. -->
+    <a href="1911-retailer-map.html" class="map-preview" aria-label="Explore retailers on the interactive map">
       <div class="map-grid"></div>
-      <div class="map-dots">-->
-        <!-- Approximate positions of Norwegian cities on the preview -->
-        <!--<div class="map-dot" style="left:52%; top:72%;"></div>  -->
-        <!-- <div class="map-dot" style="left:36%; top:66%;"></div> Bergen -->
-        <!-- <div class="map-dot" style="left:53%; top:60%;"></div>  Trondheim -->
-        <!-- <div class="map-dot" style="left:33%; top:75%;"></div>  Stavanger -->
-        <!-- <div class="map-dot" style="left:60%; top:30%;"></div>  Tromsø -->
-        <!-- <div class="map-dot" style="left:46%; top:80%;"></div>  Kristiansand -->
-      <!--</div>
+      <!-- Outline of mainland Norway (Natural Earth, public domain), drawn with the
+           same projection as the dots, so the viewBox matches the 16:9 preview. -->
+      <svg class="map-outline" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M866 224L854 225L859 233L860 237L857 248L851 257L857 261L851 269L829 260L822 259L813 255L811 256L807 258L808 279L802 294L787 285L775 298L770 316L767 320L760 323L759 328L766 345L765 351L742 385L744 396L741 399L733 404L721 406L723 426L721 435L720 454L711 475L700 495L710 501L712 513L710 522L707 526L689 523L679 527L665 549L665 554L660 565L666 580L663 585L663 602L668 618L664 646L675 655L681 665L677 679L667 682L674 709L672 726L664 735L659 737L656 745L653 750L656 764L652 781L649 783L648 782L645 773L632 769L628 760L627 742L625 745L626 750L622 754L623 765L617 777L615 776L612 779L609 780L608 777L604 772L602 773L605 777L604 779L596 784L598 787L596 789L594 790L577 810L569 817L566 817L562 820L552 823L546 821L541 822L539 820L538 817L536 817L535 820L531 819L530 818L534 813L533 812L526 811L518 807L510 800L506 790L506 779L508 777L519 784L526 778L525 777L519 780L514 775L514 773L516 769L516 764L527 752L513 761L507 764L502 770L497 770L496 767L498 757L500 748L503 747L504 744L512 747L514 743L522 739L513 741L511 740L511 737L519 727L520 720L529 711L531 713L530 723L534 711L541 706L525 711L521 714L515 724L514 727L510 730L505 739L497 748L496 744L498 732L498 727L505 727L510 725L509 723L503 723L500 721L496 709L509 698L507 697L504 701L499 703L496 700L494 697L493 680L495 679L505 679L517 676L527 678L532 675L536 675L540 680L542 685L543 684L542 678L554 674L555 672L551 671L549 667L552 661L549 664L548 673L545 674L540 674L533 672L531 668L529 675L526 676L519 674L509 675L504 677L501 677L496 673L494 670L493 661L501 658L497 655L491 647L492 638L493 637L504 637L517 643L528 642L535 639L533 638L527 640L520 640L504 635L500 635L497 634L495 631L497 624L499 623L502 624L506 616L515 611L519 614L531 611L534 608L520 611L520 609L525 601L540 600L555 604L557 602L554 601L554 598L560 595L567 595L566 592L551 596L547 593L536 596L535 595L540 584L550 579L555 575L561 575L567 576L570 581L580 589L569 572L569 568L571 565L579 564L580 562L579 558L574 557L573 554L579 549L585 546L592 549L592 550L591 554L591 556L592 556L596 550L605 547L613 560L614 558L621 556L627 557L631 556L629 551L630 547L645 538L644 534L641 532L647 527L644 524L638 528L634 531L638 535L635 539L621 550L614 553L611 553L607 543L603 544L603 538L609 531L613 522L618 517L626 504L632 500L635 495L642 490L649 486L652 482L650 482L644 485L645 477L648 473L664 461L668 467L672 466L682 452L670 461L668 458L665 458L664 456L663 451L667 439L675 425L677 420L680 417L685 416L684 413L679 410L679 408L693 403L700 403L709 396L707 395L696 399L687 400L686 388L687 382L689 382L689 376L692 372L695 371L699 367L707 367L701 363L700 360L705 356L711 347L713 347L716 344L719 345L727 342L742 342L742 339L739 338L720 338L719 337L726 323L731 319L735 320L739 324L742 325L746 333L746 327L748 322L748 320L744 322L738 317L737 313L740 308L739 307L733 312L728 313L727 312L727 304L733 294L735 293L739 294L742 297L747 295L746 292L740 291L739 289L739 287L748 281L752 280L756 277L757 279L759 290L762 299L763 299L762 292L765 286L762 282L760 274L761 271L765 267L771 266L779 269L793 264L793 263L790 261L785 262L770 262L768 257L770 253L777 247L783 247L789 240L793 226L797 220L806 216L805 205L810 195L813 197L815 202L819 205L824 205L825 204L818 197L818 193L820 191L825 191L827 189L828 182L832 176L844 172L845 173L843 198L850 170L853 166L859 162L861 167L859 185L853 204L856 202L863 190L869 191L865 184L864 180L864 169L866 164L875 164L876 166L879 166L881 158L886 157L897 171L898 170L897 158L894 154L890 151L885 146L884 142L888 140L894 142L899 138L900 139L904 137L907 140L908 139L909 135L915 132L922 137L924 151L929 159L931 159L933 157L930 151L932 141L939 130L944 124L948 124L954 111L957 108L956 105L953 103L953 99L963 87L965 86L977 98L981 93L988 96L989 100L977 119L974 135L971 143L970 148L972 151L976 149L981 142L982 134L1007 93L1010 91L1012 97L1011 106L1008 111L1010 113L1009 129L1018 122L1023 105L1026 101L1032 101L1032 99L1025 93L1024 91L1033 80L1046 84L1052 89L1050 100L1041 107L1040 110L1042 111L1047 108L1049 111L1047 117L1047 141L1050 127L1053 123L1057 104L1062 97L1069 97L1076 106L1081 108L1084 112L1085 113L1089 109L1092 108L1096 114L1095 120L1100 120L1104 121L1112 130L1113 139L1101 144L1096 150L1088 152L1061 148L1062 152L1081 160L1082 162L1081 174L1083 176L1092 178L1096 168L1098 170L1100 178L1102 173L1111 173L1112 186L1111 190L1105 191L1094 183L1095 190L1092 197L1086 202L1075 206L1071 220L1069 223L1065 225L1062 219L1063 215L1074 195L1070 181L1052 171L1040 154L1036 154L1033 155L1022 165L1012 163L1007 164L1002 173L996 180L989 208L989 227L984 234L979 236L977 238L973 250L969 253L966 252L964 249L955 246L947 240L943 239L940 245L931 250L926 250L925 248L909 245L906 236L889 208L882 208L877 212L878 221L877 224L873 222L867 222ZM492 678L488 678L490 673L491 672L493 675ZM495 716L495 722L493 721L492 714L492 711L493 709ZM1089 172L1085 174L1086 165L1088 165L1091 170ZM660 436L658 437L655 437L656 432L660 431ZM576 545L572 544L582 539L582 538L584 539L584 543ZM567 563L562 562L560 560L560 559L563 557L567 556L568 558ZM933 100L932 105L925 116L919 120L915 119L912 122L909 122L903 119L899 112L907 112L909 108L913 109L920 107L922 108L928 100L932 98ZM985 76L993 79L996 84L998 84L998 87L990 89L985 90L982 85L978 84L981 80ZM938 119L938 126L931 135L931 136L927 138L925 137L925 132L923 133L921 131L924 124L927 122L929 123L936 115ZM947 118L943 121L940 119L939 110L939 107L942 105L949 112ZM705 275L711 276L709 280L705 281L703 285L698 286L696 288L694 286L694 288L694 290L690 292L689 286L691 281L694 281L697 276L701 274ZM684 300L680 303L683 291L686 287L687 288L687 294ZM737 230L741 241L740 248L737 252L729 252L726 248L721 251L718 249L717 246L720 242L721 238L727 240L729 232L733 234L733 226L735 226ZM846 143L849 144L853 149L853 151L849 153L846 153L842 143L842 140L844 139ZM870 152L867 154L862 153L861 150L863 144L867 142L871 144ZM834 154L836 157L839 155L842 157L842 160L835 171L832 172L831 171L828 175L823 183L822 187L810 190L807 189L805 186L806 184L809 183L809 181L813 173L816 174L818 171L820 173L820 166L825 158L827 155L829 156L829 147L831 141L833 141ZM672 420L671 420L672 415L676 413L679 414ZM670 411L668 412L671 403L673 402L675 403L675 407L674 410ZM642 479L641 481L638 479L632 480L630 479L632 476L637 473L640 473L642 477ZM792 186L795 190L798 188L802 192L804 192L805 200L802 204L802 213L793 216L791 213L784 225L782 226L782 223L779 222L775 222L776 219L779 217L780 202L782 200L788 201L789 197L785 194L786 193L791 191ZM750 255L754 250L757 248L759 237L764 235L767 240L769 245L768 251L760 257L755 266L754 267L750 265L748 269L742 272L740 271L740 267L739 268L736 272L733 274L730 272L723 279L716 280L714 279L714 275L722 266L734 263L742 252L745 235L745 232L743 232L743 224L753 208L757 206L759 208L756 219L751 225L754 233L754 244Z"/>
+      </svg>
+      <div class="map-dots" id="mapDots" aria-hidden="true">
+        <div class="map-dot" style="left:39%; top:82%;"></div>
+        <div class="map-dot" style="left:31%; top:79%; --pulse-delay:0.4s"></div>
+        <div class="map-dot" style="left:42%; top:63%; --pulse-delay:0.8s"></div>
+        <div class="map-dot" style="left:35%; top:91%; --pulse-delay:1.2s"></div>
+        <div class="map-dot" style="left:52%; top:20%; --pulse-delay:1.6s"></div>
+        <div class="map-dot" style="left:46%; top:44%; --pulse-delay:2.0s"></div>
+      </div>
+      <div class="map-count" id="mapCount" hidden></div>
       <div class="map-overlay-cta">
         <span>Explore Retailers</span>
         <span>View interactive map →</span>
@@ -917,7 +960,7 @@
     </a>
 
     <a href="1911-retailer-map.html" class="retailer-link">Search All Retailers →</a>
-  </section>-->
+  </section>
 
   <!-- FOOTER -->
   <footer>
@@ -937,7 +980,7 @@
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <!--<li><a href="1911-retailer-map.html">Retailers</a></li>-->
+          <li><a href="1911-retailer-map.html">Retailers</a></li>
           <li><a href="https://www.gresshoppaaktiv.no">B2B Store</a></li>
         </ul>
       </div>
@@ -1015,6 +1058,114 @@
     window.addEventListener('resize', () => {
       if (window.innerWidth > 768) setNavOpen(false);
     });
+
+    // ── RETAILER PREVIEW: real retailers as dots ──
+    // Places each retailer from retailers.json (the list the nightly sync
+    // writes, same file the retailer map uses) on the preview, using the same
+    // map projection as the full map (Web Mercator), framed around Norway.
+    // Retailers the nightly sync hasn't positioned yet are looked up once in
+    // Kartverket's address service and remembered in this browser for 30 days.
+    (async function () {
+      const box = document.getElementById('mapDots');
+      const countEl = document.getElementById('mapCount');
+      if (!box) return;
+
+      let data = null;
+      try {
+        const res = await fetch('retailers.json', { cache: 'no-cache' });
+        if (res.ok) data = await res.json();
+      } catch (e) { /* keep the placeholder dots */ }
+      if (!data || !Array.isArray(data.retailers) || !data.retailers.length) return;
+
+      const AREA = { minLat: 57.9, maxLat: 71.2, minLng: 4.5, maxLng: 31.2 }; // mainland Norway
+      const BOX_W = 16, BOX_H = 9, FILL = 0.84;                                // preview is 16:9
+      const rad = d => d * Math.PI / 180;
+      const merc = lat => Math.log(Math.tan(Math.PI / 4 + rad(lat) / 2));
+      const spanX = rad(AREA.maxLng - AREA.minLng);
+      const spanY = merc(AREA.maxLat) - merc(AREA.minLat);
+      const scale = Math.min(FILL * BOX_W / spanX, FILL * BOX_H / spanY);
+      const offX = (BOX_W - spanX * scale) / 2;
+      const offY = (BOX_H - spanY * scale) / 2;
+
+      function toPercent(lat, lng) {
+        const la = Math.min(Math.max(lat, AREA.minLat), AREA.maxLat);
+        const ln = Math.min(Math.max(lng, AREA.minLng), AREA.maxLng);
+        return {
+          left: (offX + rad(ln - AREA.minLng) * scale) / BOX_W * 100,
+          top: (offY + (merc(AREA.maxLat) - merc(la)) * scale) / BOX_H * 100
+        };
+      }
+
+      const retailers = data.retailers.map(r => Object.assign({}, r));
+      const hasPos = r => typeof r.lat === 'number' && typeof r.lng === 'number';
+
+      function draw() {
+        const placed = retailers.filter(hasPos);
+        if (!placed.length) return; // nothing to show yet: keep the placeholder dots
+        box.innerHTML = '';
+        placed.forEach((r, i) => {
+          const p = toPercent(r.lat, r.lng);
+          const dot = document.createElement('div');
+          dot.className = 'map-dot';
+          dot.style.left = p.left.toFixed(2) + '%';
+          dot.style.top = p.top.toFixed(2) + '%';
+          dot.style.setProperty('--pulse-delay', ((i * 0.37) % 2.4).toFixed(2) + 's');
+          box.appendChild(dot);
+        });
+        countEl.innerHTML = '<strong>' + retailers.length + '</strong> retailers in Norway';
+        countEl.hidden = false;
+      }
+
+      // Cached look-ups from earlier visits
+      const CACHE_DAYS = 30;
+      const cacheKey = r => 'ga1911pos:' + (r.street || '') + '|' + (r.postcode || '');
+      retailers.forEach(r => {
+        if (hasPos(r)) return;
+        try {
+          const c = JSON.parse(localStorage.getItem(cacheKey(r)) || 'null');
+          if (c && Date.now() - c.t < CACHE_DAYS * 864e5) { r.lat = c.lat; r.lng = c.lng; }
+        } catch (e) {}
+      });
+      draw();
+
+      async function lookup(params) {
+        const url = 'https://ws.geonorge.no/adresser/v1/sok?' + new URLSearchParams(Object.assign({ treffPerSide: 1, utkoordsys: 4258 }, params));
+        const res = await fetch(url);
+        const json = await res.json();
+        const hit = json.adresser && json.adresser[0] && json.adresser[0].representasjonspunkt;
+        return hit ? { lat: hit.lat, lng: hit.lon } : null;
+      }
+
+      async function fillMissing() {
+        const missing = retailers.filter(r => !hasPos(r) && r.postcode);
+        if (!missing.length) return;
+        for (const r of missing) {
+          const streetOnly = (r.street || '').replace(/\s+\d+\s*[a-zA-Z]?\s*$/, '').trim();
+          const attempts = [];
+          if (r.street) attempts.push({ sok: r.street, postnummer: r.postcode });
+          if (streetOnly && streetOnly !== r.street) attempts.push({ sok: streetOnly, postnummer: r.postcode });
+          attempts.push({ postnummer: r.postcode });
+          for (const a of attempts) {
+            let pos = null;
+            try { pos = await lookup(a); } catch (e) {}
+            if (pos) {
+              r.lat = pos.lat; r.lng = pos.lng;
+              try { localStorage.setItem(cacheKey(r), JSON.stringify({ lat: pos.lat, lng: pos.lng, t: Date.now() })); } catch (e) {}
+              break;
+            }
+          }
+        }
+        draw();
+      }
+
+      // Only look addresses up once the visitor scrolls near the preview
+      if (retailers.some(r => !hasPos(r))) {
+        const io = new IntersectionObserver(entries => {
+          if (entries.some(e => e.isIntersecting)) { io.disconnect(); fillMissing(); }
+        }, { rootMargin: '300px' });
+        io.observe(box);
+      }
+    })();
 
   </script>
 </body>
