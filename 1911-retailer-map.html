@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>1911 Dogwear — Find a Retailer</title>
 <link rel="stylesheet" href="https://use.typekit.net/yua3lml.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -26,7 +26,7 @@ html, body {
   height: 100%;
   background: var(--black);
   color: var(--white);
-  font-family: "copperplate", serif;
+  font-family: "copperplate", Georgia, serif;
   overflow: hidden;
 }
 
@@ -44,67 +44,30 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   padding: 0 28px;
   background: var(--black);
   border-bottom: 1px solid var(--border);
   z-index: 1000;
 }
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  text-decoration: none;
-}
-  .logo-img-stacked {
-    height: 35px;
-    width: auto;
-    display: block;
-  }
-.logo-num {
-  font-family: "copperplate", serif;
-  font-size: 28px;
-  color: var(--white);
-  letter-spacing: -0.5px;
-  line-height: 1;
-}
-.logo-pipe {
-  width: 3px;
-  height: 28px;
-  background: var(--red);
-  margin: 0 5px;
-  flex-shrink: 0;
-}
-.logo-dw {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.35em;
-  color: var(--white);
-  align-self: center;
-  margin-top: 1px;
-}
+.logo { display: flex; align-items: center; text-decoration: none; }
+.logo-img-stacked { height: 35px; width: auto; display: block; }
 
 .header-title {
-  font-family: "copperplate", serif;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.4em;
   text-transform: uppercase;
   color: var(--muted);
 }
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
+.header-right { display: flex; align-items: center; gap: 20px; }
 
 .locate-btn {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 8px 18px;
-  font-family: "copperplate", serif;
+  font-family: inherit;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.3em;
@@ -115,14 +78,11 @@ header {
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
 }
-.locate-btn:hover { border-color: var(--red); background: var(--red-dim); }
+.locate-btn:hover, .locate-btn:focus-visible { border-color: var(--red); background: var(--red-dim); outline: none; }
+.locate-btn:disabled { opacity: 0.6; cursor: wait; }
 .locate-btn svg { width: 14px; height: 14px; stroke: var(--red); fill: none; stroke-width: 2; stroke-linecap: round; }
 
-.retailer-count {
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  color: var(--muted);
-}
+.retailer-count { font-size: 10px; letter-spacing: 0.2em; color: var(--muted); }
 .retailer-count span { color: var(--red); font-weight: 700; }
 
 /* ── SIDEBAR ── */
@@ -135,40 +95,20 @@ header {
   flex-direction: column;
   overflow: hidden;
 }
-
-.search-wrap {
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-
-.search-box {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
+.search-wrap { padding: 16px 20px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.search-box { position: relative; display: flex; align-items: center; }
 .search-box svg {
-  position: absolute;
-  left: 12px;
-  width: 14px;
-  height: 14px;
-  stroke: var(--muted);
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  pointer-events: none;
+  position: absolute; left: 12px; width: 14px; height: 14px;
+  stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; pointer-events: none;
 }
-
 .search-box input {
   width: 100%;
   padding: 10px 12px 10px 36px;
   background: var(--surface2);
   border: 1px solid var(--border);
   color: var(--white);
-  font-family: "copperplate", serif;
+  font-family: inherit;
   font-size: 13px;
-  font-weight: 400;
   letter-spacing: 0.06em;
   outline: none;
   transition: border-color 0.2s;
@@ -176,14 +116,10 @@ header {
 .search-box input::placeholder { color: var(--muted); }
 .search-box input:focus { border-color: var(--red); }
 
-.filter-row {
-  display: flex;
-  gap: 6px;
-  margin-top: 10px;
-}
-
+.filter-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .filter-chip {
   padding: 5px 12px;
+  font-family: inherit;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.25em;
@@ -194,50 +130,25 @@ header {
   cursor: pointer;
   transition: all 0.15s;
 }
-.filter-chip:hover, .filter-chip.active {
-  color: var(--white);
-  border-color: var(--red);
-  background: var(--red-dim);
+.filter-chip:hover, .filter-chip.active, .filter-chip:focus-visible {
+  color: var(--white); border-color: var(--red); background: var(--red-dim); outline: none;
 }
 
-/* Sort row */
 .sort-row {
   padding: 10px 20px;
   border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   flex-shrink: 0;
 }
-
-.sort-label {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
+.sort-label { font-size: 9px; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); }
 .sort-select {
-  background: transparent;
-  border: none;
-  color: var(--muted2);
-  font-family: "copperplate", serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  cursor: pointer;
-  outline: none;
+  background: transparent; border: none; color: var(--muted2);
+  font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  cursor: pointer; outline: none;
 }
 .sort-select option { background: #191716; color: var(--white); }
 
-/* Retailer list */
-.retailer-list {
-  flex: 1;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-}
+.retailer-list { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
 .retailer-list::-webkit-scrollbar { width: 3px; }
 .retailer-list::-webkit-scrollbar-track { background: transparent; }
 .retailer-list::-webkit-scrollbar-thumb { background: rgba(200,16,46,0.4); }
@@ -247,93 +158,27 @@ header {
   border-bottom: 1px solid var(--border);
   cursor: pointer;
   transition: background 0.15s;
-  position: relative;
 }
-.retailer-card:hover { background: var(--surface2); }
-.retailer-card.active {
-  background: var(--surface2);
-  border-left: 3px solid var(--red);
-  padding-left: 17px;
-}
+.retailer-card:hover, .retailer-card:focus-visible { background: var(--surface2); outline: none; }
+.retailer-card.active { background: var(--surface2); border-left: 3px solid var(--red); padding-left: 17px; }
 
-.card-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
-.card-name {
-  font-family: "copperplate", serif;
-  font-size: 18px;
-  letter-spacing: 0.06em;
-  color: var(--white);
-  line-height: 1.1;
-}
-
-.card-distance {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  color: var(--red);
-  white-space: nowrap;
-  padding-top: 2px;
-}
-
-.card-city {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-
-.card-address {
-  font-family: "copperplate", serif;
-  font-size: 13px;
-  font-style: italic;
-  color: var(--muted2);
-  line-height: 1.4;
-  margin-bottom: 10px;
-}
-
-.card-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
+.card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.card-name { font-size: 18px; letter-spacing: 0.06em; color: var(--white); line-height: 1.15; }
+.card-distance { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; color: var(--red); white-space: nowrap; padding-top: 2px; }
+.card-city { font-size: 10px; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.card-address { font-size: 13px; font-style: italic; color: var(--muted2); line-height: 1.4; margin-bottom: 8px; }
 .card-hours {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--muted);
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10px; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 4px;
 }
 .card-hours svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+.card-nomap { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
 
-.card-status {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-}
-.card-status.open { color: #5a9e5a; background: rgba(90,158,90,0.12); }
-.card-status.closed { color: #888; background: rgba(136,136,136,0.1); }
-
-.card-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
+.card-actions { display: flex; gap: 8px; margin-top: 12px; }
 .card-btn {
   flex: 1;
   padding: 7px 0;
-  font-family: "copperplate", serif;
+  font-family: inherit;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.28em;
@@ -347,190 +192,103 @@ header {
   text-align: center;
   display: block;
 }
-.card-btn:hover { border-color: var(--red); color: var(--white); background: var(--red-dim); }
+.card-btn:hover, .card-btn:focus-visible { border-color: var(--red); color: var(--white); background: var(--red-dim); outline: none; }
 .card-btn.primary { border-color: var(--red); color: var(--red); }
 .card-btn.primary:hover { background: var(--red); color: var(--white); }
+.card-btn[disabled] { opacity: 0.35; pointer-events: none; }
 
-.no-results {
-  padding: 60px 20px;
-  text-align: center;
-  color: var(--muted);
-}
-.no-results p:first-child {
-  font-family: "copperplate", serif;
-  font-size: 28px;
-  color: rgba(245,240,232,0.2);
-  margin-bottom: 8px;
-  letter-spacing: 0.1em;
-}
-.no-results p:last-child {
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
+.list-message { padding: 60px 20px; text-align: center; color: var(--muted); }
+.list-message p:first-child { font-size: 28px; color: rgba(245,240,232,0.2); margin-bottom: 8px; letter-spacing: 0.1em; }
+.list-message p:last-child { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; }
 
 /* ── MAP ── */
-#map {
-  grid-row: 2;
-  grid-column: 2;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-/* Leaflet overrides */
-.leaflet-container { background: #0a0908; }
-.leaflet-control-zoom {
-  border: 1px solid var(--border-mid) !important;
-  border-radius: 0 !important;
-}
+#map { grid-row: 2; grid-column: 2; width: 100%; height: 100%; z-index: 1; }
+.leaflet-container { background: #0a0908; font-family: inherit; }
+.leaflet-control-zoom { border: 1px solid var(--border-mid) !important; border-radius: 0 !important; }
 .leaflet-control-zoom a {
-  background: var(--surface) !important;
-  color: var(--white) !important;
-  border: none !important;
-  border-bottom: 1px solid var(--border) !important;
-  font-family: "copperplate", serif !important;
-  font-size: 16px !important;
-  line-height: 26px !important;
+  background: var(--surface) !important; color: var(--white) !important; border: none !important;
+  border-bottom: 1px solid var(--border) !important; font-size: 16px !important; line-height: 26px !important;
 }
 .leaflet-control-zoom a:hover { background: var(--surface2) !important; }
-.leaflet-control-attribution { display: none; }
+.leaflet-control-attribution {
+  background: rgba(8,8,8,0.7) !important; color: var(--muted) !important; font-size: 9px !important;
+}
+.leaflet-control-attribution a { color: var(--muted2) !important; }
 
-/* Custom popup */
 .leaflet-popup-content-wrapper {
-  background: var(--surface) !important;
-  border: 1px solid var(--border-mid) !important;
-  border-radius: 0 !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.7) !important;
-  padding: 0 !important;
+  background: var(--surface) !important; border: 1px solid var(--border-mid) !important; border-radius: 0 !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7) !important; padding: 0 !important; color: var(--white);
 }
 .leaflet-popup-tip { background: var(--surface) !important; }
 .leaflet-popup-content { margin: 0 !important; }
-.leaflet-popup-close-button {
-  color: var(--muted) !important;
-  font-size: 16px !important;
-  padding: 6px 8px !important;
-  top: 4px !important;
-  right: 4px !important;
-}
+.leaflet-popup-close-button { color: var(--muted) !important; font-size: 16px !important; padding: 6px 8px !important; top: 4px !important; right: 4px !important; }
 
-.popup-inner {
-  padding: 16px 18px 14px;
-  min-width: 200px;
-}
-.popup-name {
-  font-family: "copperplate", serif;
-  font-size: 20px;
-  letter-spacing: 0.06em;
-  color: var(--white);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.popup-city {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 8px;
-}
-.popup-addr {
-  font-family: "copperplate", serif;
-  font-size: 13px;
-  font-style: italic;
-  color: var(--muted2);
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-.popup-divider {
-  height: 1px;
-  background: var(--border);
-  margin: 10px 0;
-}
-.popup-hours {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-}
+.popup-inner { padding: 16px 18px 14px; min-width: 200px; }
+.popup-name { font-size: 20px; letter-spacing: 0.06em; color: var(--white); line-height: 1; margin-bottom: 4px; }
+.popup-city { font-size: 9px; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--red); margin-bottom: 8px; }
+.popup-addr { font-size: 13px; font-style: italic; color: var(--muted2); line-height: 1.4; }
+.popup-divider { height: 1px; background: var(--border); margin: 10px 0; }
+.popup-hours { font-size: 10px; letter-spacing: 0.1em; color: var(--muted); }
 
-/* User location marker */
 .user-dot {
-  width: 14px; height: 14px;
-  background: var(--red);
-  border-radius: 50%;
-  border: 2px solid var(--white);
-  box-shadow: 0 0 0 4px rgba(200,16,46,0.25);
+  width: 14px; height: 14px; background: var(--red); border-radius: 50%;
+  border: 2px solid var(--white); box-shadow: 0 0 0 4px rgba(200,16,46,0.25);
 }
 
-/* Toast */
 .toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
+  position: fixed; bottom: 24px; left: 50%;
   transform: translateX(-50%) translateY(80px);
-  background: var(--surface2);
-  border: 1px solid var(--border-mid);
-  color: var(--white);
-  padding: 12px 24px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  z-index: 9999;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
+  background: var(--surface2); border: 1px solid var(--border-mid); color: var(--white);
+  padding: 12px 24px; font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+  z-index: 9999; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none;
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
 @media (max-width: 900px) {
-  .app {
-    grid-template-columns: 1fr;
-    grid-template-rows: 64px 50vh 1fr;
-    overflow: auto;
-  }
+  .app { grid-template-columns: 1fr; grid-template-rows: 64px 50vh 1fr; height: auto; min-height: 100vh; }
   html, body { overflow: auto; }
+  header { padding: 0 16px; }
+  .header-title { display: none; }
   #map { grid-row: 2; grid-column: 1; }
-  .sidebar { grid-row: 3; grid-column: 1; height: auto; overflow: visible; }
+  .sidebar { grid-row: 3; grid-column: 1; overflow: visible; }
   .retailer-list { overflow: visible; }
+}
+@media (max-width: 480px) {
+  .retailer-count { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; scroll-behavior: auto !important; }
 }
 </style>
 </head>
 <body>
 
 <div class="app">
-
-  <!-- HEADER -->
   <header>
     <a href="1911LandingPage.html" class="logo">
-   <img src="logo 1911 laying white.png" alt="1911 Dogwear" class="logo-img-stacked">
+      <img src="logo 1911 laying white.webp" alt="1911 Dogwear" class="logo-img-stacked">
     </a>
     <span class="header-title">Find a Retailer</span>
     <div class="header-right">
-      <span class="retailer-count"><span id="visible-count">8</span> retailers found</span>
-      <button class="locate-btn" id="locate-btn">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>
-        Near Me
+      <span class="retailer-count"><span id="visible-count">0</span> retailers found</span>
+      <button class="locate-btn" id="locate-btn" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>
+        <span>Near Me</span>
       </button>
     </div>
   </header>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="search-wrap">
       <div class="search-box">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" id="search-input" placeholder="Search by city or store name…">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search-input" placeholder="Search by city or store name…" aria-label="Search by city or store name">
       </div>
-      <div class="filter-row">
-        <button class="filter-chip active" data-filter="all">All</button>
-        <button class="filter-chip" data-filter="oslo">Oslo Area</button>
-        <button class="filter-chip" data-filter="west">West Norway</button>
-        <button class="filter-chip" data-filter="north">North</button>
-      </div>
+      <div class="filter-row" id="filter-row" role="group" aria-label="Filter by region"></div>
     </div>
 
     <div class="sort-row">
-      <span class="sort-label">Sort by</span>
+      <label class="sort-label" for="sort-select">Sort by</label>
       <select class="sort-select" id="sort-select">
         <option value="name">Name</option>
         <option value="distance">Distance</option>
@@ -538,104 +296,59 @@ header {
       </select>
     </div>
 
-    <div class="retailer-list" id="retailer-list"></div>
+    <div class="retailer-list" id="retailer-list" aria-live="polite">
+      <div class="list-message"><p>Loading</p><p>Finding 1911 retailers</p></div>
+    </div>
   </aside>
 
-  <!-- MAP -->
-  <div id="map"></div>
+  <div id="map" role="region" aria-label="Map of retailers"></div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status"></div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-const RETAILERS = [
-  {
-    id: 1, name: "Villmarks-Spesialisten", city: "Oslo", region: "oslo",
-    address: "Bogstadveien 2, 0355 Oslo",
-    lat: 59.9282, lng: 10.7135,
-    hours: "Mon–Fri 10:00–18:00 · Sat 10:00–16:00",
-    phone: "+47 22 46 70 20",
-    website: "https://villmarksspesialisten.no"
-  },
-  {
-    id: 2, name: "Specsavers Sport", city: "Oslo", region: "oslo",
-    address: "Karl Johans gate 41, 0162 Oslo",
-    lat: 59.9127, lng: 10.7461,
-    hours: "Mon–Sat 09:00–19:00 · Sun 11:00–17:00",
-    phone: "+47 22 33 44 55",
-    website: "#"
-  },
-  {
-    id: 3, name: "Fjellsport Bergen", city: "Bergen", region: "west",
-    address: "Strandgaten 18, 5004 Bergen",
-    lat: 60.3929, lng: 5.3228,
-    hours: "Mon–Fri 10:00–18:00 · Sat 10:00–15:00",
-    phone: "+47 55 31 22 10",
-    website: "#"
-  },
-  {
-    id: 4, name: "Havgapet Utstyr", city: "Ålesund", region: "west",
-    address: "Kirkegata 8, 6002 Ålesund",
-    lat: 62.4722, lng: 6.1549,
-    hours: "Mon–Fri 10:00–17:30 · Sat 10:00–15:00",
-    phone: "+47 70 12 34 56",
-    website: "#"
-  },
-  {
-    id: 5, name: "Villmarkssport Trondheim", city: "Trondheim", region: "mid",
-    address: "Nordre gate 10, 7011 Trondheim",
-    lat: 63.4305, lng: 10.3951,
-    hours: "Mon–Fri 09:30–18:00 · Sat 10:00–16:00",
-    phone: "+47 73 52 90 10",
-    website: "#"
-  },
-  {
-    id: 6, name: "Friluft Stavanger", city: "Stavanger", region: "west",
-    address: "Øvre Holmegate 5, 4006 Stavanger",
-    lat: 58.9700, lng: 5.7331,
-    hours: "Mon–Fri 10:00–18:00 · Sat 10:00–16:00",
-    phone: "+47 51 84 30 20",
-    website: "#"
-  },
-  {
-    id: 7, name: "Arctic Gear Tromsø", city: "Tromsø", region: "north",
-    address: "Storgata 64, 9008 Tromsø",
-    lat: 69.6492, lng: 18.9553,
-    hours: "Mon–Fri 10:00–17:00 · Sat 10:00–14:00",
-    phone: "+47 77 68 50 40",
-    website: "#"
-  },
-  {
-    id: 8, name: "Sørlandet Sport", city: "Kristiansand", region: "south",
-    address: "Markens gate 20, 4611 Kristiansand",
-    lat: 58.1467, lng: 7.9956,
-    hours: "Mon–Fri 09:30–17:30 · Sat 10:00–15:00",
-    phone: "+47 38 02 11 90",
-    website: "#"
-  }
+/* Where the retailer list comes from. The sync job writes this file. */
+const DATA_URL = 'retailers.json';
+
+/* CARTO basemap key (free, register as commercial use at carto.com/basemaps/apikey).
+   Without a key CARTO shows an "API key required" watermark on the map. */
+const CARTO_KEY = 'cb1_4cp9_1_c9812f699c99e55461b576ea';
+
+/* Region buttons, in display order. Only regions that have retailers are shown. */
+const REGIONS = [
+  { key: 'east',  label: 'East' },
+  { key: 'south', label: 'South' },
+  { key: 'west',  label: 'West' },
+  { key: 'mid',   label: 'Mid' },
+  { key: 'north', label: 'North' }
 ];
 
-// State
+let RETAILERS = [];
 let activeId = null;
 let userPos = null;
-let filteredRetailers = [...RETAILERS];
+let userMarker = null;
+let filteredRetailers = [];
 let activeFilter = 'all';
-let markers = {};
+const markers = {};
 
-// ── MAP INIT ──
-const map = L.map('map', {
-  center: [64.5, 16.5],
-  zoom: 5,
-  zoomControl: true
-});
+/* Everything from the ERP is treated as text, never as HTML. */
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function safeUrl(u) {
+  try { const x = new URL(u); return (x.protocol === 'https:' || x.protocol === 'http:') ? x.href : ''; } catch (e) { return ''; }
+}
+function telHref(p) { return 'tel:' + String(p).replace(/[^\d+]/g, ''); }
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+// ── MAP ──
+const map = L.map('map', { center: [64.5, 16.5], zoom: 5, zoomControl: true });
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' + (CARTO_KEY ? '?key=' + encodeURIComponent(CARTO_KEY) : ''), {
   maxZoom: 19,
-  subdomains: 'abcd'
+  subdomains: 'abcd',
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(map);
 
-// ── CUSTOM MARKER ──
 function makeIcon(active) {
   return L.divIcon({
     className: '',
@@ -650,214 +363,245 @@ function makeIcon(active) {
   });
 }
 
-// ── ADD MARKERS ──
-RETAILERS.forEach(r => {
-  const marker = L.marker([r.lat, r.lng], { icon: makeIcon(false) }).addTo(map);
+function hasPos(r) { return typeof r.lat === 'number' && typeof r.lng === 'number'; }
 
+function addMarker(r) {
+  if (!hasPos(r) || markers[r.id]) return;
+  const marker = L.marker([r.lat, r.lng], { icon: makeIcon(false), title: r.name, alt: r.name }).addTo(map);
   marker.bindPopup(`
     <div class="popup-inner">
-      <div class="popup-name">${r.name}</div>
-      <div class="popup-city">${r.city}</div>
-      <div class="popup-addr">${r.address}</div>
-      <div class="popup-divider"></div>
-      <div class="popup-hours">${r.hours}</div>
-    </div>
-  `, { maxWidth: 260 });
-
-  marker.on('click', () => {
-    setActive(r.id);
-    scrollToCard(r.id);
-  });
-
+      <div class="popup-name">${esc(r.name)}</div>
+      <div class="popup-city">${esc(r.city)}</div>
+      <div class="popup-addr">${esc(r.address)}</div>
+      ${r.hours ? `<div class="popup-divider"></div><div class="popup-hours">${esc(r.hours)}</div>` : ''}
+    </div>`, { maxWidth: 260 });
+  marker.on('click', () => { setActive(r.id); scrollToCard(r.id); });
   markers[r.id] = marker;
-});
-
-// ── RENDER LIST ──
-function isOpen(hours) {
-  const now = new Date();
-  const day = now.getDay();
-  const h = now.getHours();
-  if (day === 0) return false;
-  if (day === 6) return h >= 10 && h < 16;
-  return h >= 9 && h < 18;
 }
 
+// ── DISTANCE ──
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
+function distanceTo(r) { return (userPos && hasPos(r)) ? haversine(userPos.lat, userPos.lng, r.lat, r.lng) : null; }
+function formatDist(km) { return km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(km < 10 ? 1 : 0)} km`; }
 
-function formatDist(km) {
-  return km < 1 ? `${Math.round(km*1000)} m` : `${km.toFixed(1)} km`;
-}
+// ── LIST ──
+function renderList(list) {
+  const el = document.getElementById('retailer-list');
+  document.getElementById('visible-count').textContent = list.length;
 
-function renderList(retailers) {
-  const list = document.getElementById('retailer-list');
-  document.getElementById('visible-count').textContent = retailers.length;
-
-  if (retailers.length === 0) {
-    list.innerHTML = `<div class="no-results"><p>No Results</p><p>Try a different search or filter</p></div>`;
+  if (list.length === 0) {
+    el.innerHTML = `<div class="list-message"><p>No Results</p><p>Try a different search or filter</p></div>`;
     return;
   }
 
-  list.innerHTML = retailers.map(r => {
-    const open = isOpen(r.hours);
-    const dist = userPos ? haversine(userPos.lat, userPos.lng, r.lat, r.lng) : null;
+  el.innerHTML = list.map(r => {
+    const dist = distanceTo(r);
+    const web = safeUrl(r.website);
     return `
-      <div class="retailer-card ${activeId === r.id ? 'active' : ''}" id="card-${r.id}" data-id="${r.id}">
+      <div class="retailer-card ${activeId === r.id ? 'active' : ''}" id="card-${r.id}" data-id="${r.id}" tabindex="0" role="button" aria-label="${esc(r.name)}, ${esc(r.city)}">
         <div class="card-top">
-          <div class="card-name">${r.name}</div>
+          <div class="card-name">${esc(r.name)}</div>
           ${dist !== null ? `<div class="card-distance">${formatDist(dist)}</div>` : ''}
         </div>
-        <div class="card-city">${r.city}</div>
-        <div class="card-address">${r.address}</div>
-        <div class="card-meta">
-          <div class="card-hours">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-            ${r.hours.split('·')[0].trim()}
-          </div>
-          <span class="card-status ${open ? 'open' : 'closed'}">${open ? 'Open Now' : 'Closed'}</span>
-        </div>
+        <div class="card-city">${esc(r.city)}</div>
+        <div class="card-address">${esc(r.address)}</div>
+        ${r.hours ? `<div class="card-hours"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>${esc(r.hours)}</div>` : ''}
+        ${hasPos(r) ? '' : '<div class="card-nomap">Not on the map yet</div>'}
         <div class="card-actions">
-          <button class="card-btn primary" onclick="flyTo(${r.id})">View on Map</button>
-          <a class="card-btn" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(r.address)}" target="_blank">Directions</a>
-          ${r.phone ? `<a class="card-btn" href="tel:${r.phone}">Call</a>` : ''}
+          <button class="card-btn primary" type="button" data-fly="${r.id}" ${hasPos(r) ? '' : 'disabled'}>View on Map</button>
+          <a class="card-btn" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(r.name + ', ' + r.address)}" target="_blank" rel="noopener">Directions</a>
+          ${r.phone ? `<a class="card-btn" href="${esc(telHref(r.phone))}">Call</a>` : ''}
+          ${web ? `<a class="card-btn" href="${esc(web)}" target="_blank" rel="noopener">Website</a>` : ''}
         </div>
-      </div>
-    `;
+      </div>`;
   }).join('');
-
-  list.querySelectorAll('.retailer-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
-      const id = parseInt(card.dataset.id);
-      setActive(id);
-      flyTo(id);
-    });
-  });
 }
 
-// ── ACTIVE STATE ──
+document.getElementById('retailer-list').addEventListener('click', e => {
+  const fly = e.target.closest('[data-fly]');
+  if (fly) { flyTo(parseInt(fly.dataset.fly, 10)); return; }
+  if (e.target.closest('a')) return;
+  const card = e.target.closest('.retailer-card');
+  if (card) { const id = parseInt(card.dataset.id, 10); setActive(id); flyTo(id); }
+});
+document.getElementById('retailer-list').addEventListener('keydown', e => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const card = e.target.closest('.retailer-card');
+  if (card && e.target === card) { e.preventDefault(); flyTo(parseInt(card.dataset.id, 10)); }
+});
+
+// ── ACTIVE ──
 function setActive(id) {
   activeId = id;
-  Object.entries(markers).forEach(([mid, m]) => {
-    m.setIcon(makeIcon(parseInt(mid) === id));
-  });
-  renderList(filteredRetailers);
+  Object.entries(markers).forEach(([mid, m]) => m.setIcon(makeIcon(parseInt(mid, 10) === id)));
+  document.querySelectorAll('.retailer-card').forEach(c => c.classList.toggle('active', parseInt(c.dataset.id, 10) === id));
 }
-
 function flyTo(id) {
   const r = RETAILERS.find(x => x.id === id);
-  if (!r) return;
-  map.flyTo([r.lat, r.lng], 14, { duration: 1.2, easeLinearity: 0.25 });
-  setTimeout(() => markers[id].openPopup(), 1000);
   setActive(id);
+  if (!r || !hasPos(r)) return;
+  map.flyTo([r.lat, r.lng], 14, { duration: 1.2, easeLinearity: 0.25 });
+  setTimeout(() => markers[id] && markers[id].openPopup(), 1000);
 }
-
 function scrollToCard(id) {
   const card = document.getElementById('card-' + id);
   if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-window.flyTo = flyTo;
-
-// ── SEARCH ──
-document.getElementById('search-input').addEventListener('input', function() {
-  applyFilters();
-});
-
-// ── FILTERS ──
-document.querySelectorAll('.filter-chip').forEach(chip => {
-  chip.addEventListener('click', function() {
-    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    this.classList.add('active');
-    activeFilter = this.dataset.filter;
+// ── FILTERS, SEARCH, SORT ──
+function buildRegionChips() {
+  const present = new Set(RETAILERS.map(r => r.region));
+  const chips = [{ key: 'all', label: 'All' }].concat(REGIONS.filter(x => present.has(x.key)));
+  const row = document.getElementById('filter-row');
+  row.innerHTML = chips.map(c => `<button type="button" class="filter-chip ${c.key === activeFilter ? 'active' : ''}" data-filter="${c.key}" aria-pressed="${c.key === activeFilter}">${c.label}</button>`).join('');
+  row.querySelectorAll('.filter-chip').forEach(chip => chip.addEventListener('click', () => {
+    activeFilter = chip.dataset.filter;
+    row.querySelectorAll('.filter-chip').forEach(c => { c.classList.toggle('active', c === chip); c.setAttribute('aria-pressed', c === chip); });
     applyFilters();
-  });
-});
+  }));
+}
 
-// ── SORT ──
-document.getElementById('sort-select').addEventListener('change', function() {
-  applyFilters();
-});
+function norm(s) {
+  return String(s || '').toLowerCase().replace(/ø/g, 'o').replace(/æ/g, 'ae')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
 
 function applyFilters() {
-  const query = document.getElementById('search-input').value.toLowerCase();
+  const query = norm(document.getElementById('search-input').value.trim());
   const sort = document.getElementById('sort-select').value;
 
   let result = RETAILERS.filter(r => {
-    const matchText = r.name.toLowerCase().includes(query) || r.city.toLowerCase().includes(query) || r.address.toLowerCase().includes(query);
-    const matchFilter = activeFilter === 'all' || r.region === activeFilter;
-    return matchText && matchFilter;
+    const text = norm(`${r.name} ${r.city} ${r.address} ${r.postcode}`);
+    return (!query || text.includes(query)) && (activeFilter === 'all' || r.region === activeFilter);
   });
 
   if (sort === 'distance' && userPos) {
-    result.sort((a, b) => haversine(userPos.lat, userPos.lng, a.lat, a.lng) - haversine(userPos.lat, userPos.lng, b.lat, b.lng));
+    result.sort((a, b) => (distanceTo(a) ?? Infinity) - (distanceTo(b) ?? Infinity));
   } else if (sort === 'city') {
-    result.sort((a, b) => a.city.localeCompare(b.city));
+    result.sort((a, b) => a.city.localeCompare(b.city, 'nb') || a.name.localeCompare(b.name, 'nb'));
   } else {
-    result.sort((a, b) => a.name.localeCompare(b.name));
+    result.sort((a, b) => a.name.localeCompare(b.name, 'nb'));
   }
 
   filteredRetailers = result;
   renderList(result);
 
-  // Show/hide markers
-  RETAILERS.forEach(r => {
-    const visible = result.find(x => x.id === r.id);
-    if (visible) {
-      if (!map.hasLayer(markers[r.id])) markers[r.id].addTo(map);
-    } else {
-      if (map.hasLayer(markers[r.id])) map.removeLayer(markers[r.id]);
-    }
+  const visible = new Set(result.map(r => r.id));
+  Object.entries(markers).forEach(([id, m]) => {
+    const show = visible.has(parseInt(id, 10));
+    if (show && !map.hasLayer(m)) m.addTo(map);
+    if (!show && map.hasLayer(m)) map.removeLayer(m);
   });
 }
 
-// ── GEOLOCATION ──
-document.getElementById('locate-btn').addEventListener('click', function() {
-  if (!navigator.geolocation) {
-    showToast('Geolocation not supported');
-    return;
+document.getElementById('search-input').addEventListener('input', applyFilters);
+document.getElementById('sort-select').addEventListener('change', () => {
+  if (document.getElementById('sort-select').value === 'distance' && !userPos) {
+    showToast('Press Near Me to sort by distance');
   }
-  this.textContent = 'Locating…';
-  this.disabled = true;
+  applyFilters();
+});
+
+function fitToRetailers() {
+  const pts = RETAILERS.filter(hasPos).map(r => [r.lat, r.lng]);
+  if (pts.length) map.fitBounds(pts, { padding: [40, 40], maxZoom: 12 });
+}
+
+// ── POSITIONS FOR ADDRESSES THE SYNC HAS NOT PLACED YET ──
+/* The sync job normally adds lat/lng. If a retailer arrives without a position
+   (e.g. before the first full sync), look it up once in Kartverket's address
+   service and keep it for this browser session. */
+async function fillMissingPositions() {
+  const missing = RETAILERS.filter(r => !hasPos(r) && r.street && r.postcode);
+  for (const r of missing) {
+    const key = 'pos:' + r.street + '|' + r.postcode;
+    let pos = null;
+    try { pos = JSON.parse(sessionStorage.getItem(key) || 'null'); } catch (e) {}
+    if (!pos) {
+      try {
+        const url = 'https://ws.geonorge.no/adresser/v1/sok?' + new URLSearchParams({ sok: r.street, postnummer: r.postcode, treffPerSide: 1, utkoordsys: 4258 });
+        const res = await fetch(url);
+        const data = await res.json();
+        const hit = data.adresser && data.adresser[0] && data.adresser[0].representasjonspunkt;
+        if (hit) { pos = { lat: hit.lat, lng: hit.lon }; try { sessionStorage.setItem(key, JSON.stringify(pos)); } catch (e) {} }
+      } catch (e) { /* leave it off the map */ }
+    }
+    if (pos) { r.lat = pos.lat; r.lng = pos.lng; addMarker(r); }
+  }
+  if (missing.length) { fitToRetailers(); applyFilters(); }
+}
+
+// ── NEAR ME ──
+document.getElementById('locate-btn').addEventListener('click', function () {
+  const btn = this;
+  const label = btn.querySelector('span');
+  if (!navigator.geolocation) { showToast('Geolocation not supported'); return; }
+  label.textContent = 'Locating…';
+  btn.disabled = true;
   navigator.geolocation.getCurrentPosition(
     pos => {
       userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-
-      // User dot marker
-      const userIcon = L.divIcon({ className: '', html: '<div class="user-dot"></div>', iconSize: [14,14], iconAnchor: [7,7] });
-      L.marker([userPos.lat, userPos.lng], { icon: userIcon }).addTo(map).bindPopup('<div class="popup-inner"><div class="popup-name">Your Location</div></div>');
-
+      if (userMarker) map.removeLayer(userMarker);
+      const userIcon = L.divIcon({ className: '', html: '<div class="user-dot"></div>', iconSize: [14, 14], iconAnchor: [7, 7] });
+      userMarker = L.marker([userPos.lat, userPos.lng], { icon: userIcon, title: 'Your location' })
+        .addTo(map).bindPopup('<div class="popup-inner"><div class="popup-name">Your Location</div></div>');
       document.getElementById('sort-select').value = 'distance';
       applyFilters();
-      map.flyTo([userPos.lat, userPos.lng], 7, { duration: 1.5 });
+      const nearest = filteredRetailers.find(hasPos);
+      if (nearest) map.flyToBounds([[userPos.lat, userPos.lng], [nearest.lat, nearest.lng]], { padding: [60, 60], maxZoom: 12, duration: 1.5 });
+      else map.flyTo([userPos.lat, userPos.lng], 8, { duration: 1.5 });
       showToast('Showing nearest retailers');
-
-      document.getElementById('locate-btn').innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#C8102E;fill:none;stroke-width:2;stroke-linecap:round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg> Located`;
-      document.getElementById('locate-btn').disabled = false;
+      label.textContent = 'Located';
+      btn.disabled = false;
     },
     () => {
       showToast('Could not get your location');
-      document.getElementById('locate-btn').textContent = 'Near Me';
-      document.getElementById('locate-btn').disabled = false;
-    }
+      label.textContent = 'Near Me';
+      btn.disabled = false;
+    },
+    { enableHighAccuracy: false, timeout: 10000, maximumAge: 600000 }
   );
 });
 
 // ── TOAST ──
+let toastTimer = null;
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-// ── INIT ──
-renderList(RETAILERS.sort((a,b) => a.name.localeCompare(b.name)));
+// ── START ──
+async function init() {
+  try {
+    const res = await fetch(DATA_URL, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    RETAILERS = (data.retailers || []).map(r => ({
+      id: r.id, name: r.name || '', city: r.city || '', address: r.address || '', street: r.street || '',
+      postcode: r.postcode || '', region: r.region || '', lat: r.lat, lng: r.lng,
+      phone: r.phone || '', website: r.website || '', hours: r.hours || ''
+    }));
+  } catch (e) {
+    document.getElementById('retailer-list').innerHTML =
+      '<div class="list-message"><p>Unavailable</p><p>The retailer list could not be loaded</p></div>';
+    return;
+  }
+  RETAILERS.forEach(addMarker);
+  buildRegionChips();
+  applyFilters();
+  fitToRetailers();
+  fillMissingPositions();
+}
+init();
 </script>
 </body>
 </html>
