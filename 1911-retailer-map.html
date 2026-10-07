@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>1911 Dogwear — Find a Retailer</title>
 <link rel="stylesheet" href="https://use.typekit.net/yua3lml.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
@@ -266,7 +267,7 @@ header {
 <div class="app">
   <header>
     <a href="1911LandingPage.html" class="logo">
-      <img src="logo 1911 laying white.webp" alt="1911 Dogwear" class="logo-img-stacked">
+      <img src="logo 1911 laying white.png" alt="1911 Dogwear" class="logo-img-stacked">
     </a>
     <span class="header-title">Find a Retailer</span>
     <div class="header-right">
@@ -307,13 +308,15 @@ header {
 <div class="toast" id="toast" role="status"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<!-- Same list as retailers.json, as a script, so the page also works when opened straight from a folder (file://) -->
+<script src="retailers.js"></script>
 <script>
 /* Where the retailer list comes from. The sync job writes this file. */
 const DATA_URL = 'retailers.json';
 
 /* CARTO basemap key (free, register as commercial use at carto.com/basemaps/apikey).
    Without a key CARTO shows an "API key required" watermark on the map. */
-const CARTO_KEY = 'cb1_4cp9_1_c9812f699c99e55461b576ea';
+const CARTO_KEY = '';
 
 /* Region buttons, in display order. Only regions that have retailers are shown. */
 const REGIONS = [
@@ -346,6 +349,9 @@ const map = L.map('map', { center: [64.5, 16.5], zoom: 5, zoomControl: true });
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' + (CARTO_KEY ? '?key=' + encodeURIComponent(CARTO_KEY) : ''), {
   maxZoom: 19,
   subdomains: 'abcd',
+  /* CARTO checks which website the tiles are for. Send the site address with
+     tile requests even if the site's own settings hide it (Referrer-Policy). */
+  referrerPolicy: 'strict-origin-when-cross-origin',
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(map);
 
@@ -581,10 +587,16 @@ function showToast(msg) {
 
 // ── START ──
 async function init() {
+  let data = null;
   try {
     const res = await fetch(DATA_URL, { cache: 'no-cache' });
     if (!res.ok) throw new Error(res.status);
-    const data = await res.json();
+    data = await res.json();
+  } catch (e) {
+    data = window.RETAILERS_DATA || null; // fetch is blocked when the page is opened from a folder
+  }
+  try {
+    if (!data) throw new Error('no data');
     RETAILERS = (data.retailers || []).map(r => ({
       id: r.id, name: r.name || '', city: r.city || '', address: r.address || '', street: r.street || '',
       postcode: r.postcode || '', region: r.region || '', lat: r.lat, lng: r.lng,
