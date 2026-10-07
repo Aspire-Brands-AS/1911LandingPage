@@ -3,20 +3,6 @@
  "source": "Visma Business NXT company 5813776, brand 260, last 12 months",
  "retailers": [
   {
-   "id": 3985,
-   "name": "Aktiv Dyreklinikk",
-   "address": "Ånebyveien 19, 1488 Hakadal",
-   "street": "Ånebyveien 19",
-   "postcode": "1488",
-   "city": "Hakadal",
-   "region": "east",
-   "lat": null,
-   "lng": null,
-   "phone": "+47 67 05 05 22",
-   "website": "",
-   "hours": ""
-  },
-  {
    "id": 3360,
    "name": "AniCura Dyresykehus Stjørdal",
    "address": "Ole Rises gate 5, 7500 Stjørdal",
