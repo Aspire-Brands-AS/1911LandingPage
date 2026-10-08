@@ -295,6 +295,20 @@
    "phone": "+47 47 71 10 00",
    "website": "https://stavangerdyrebutikk.no",
    "hours": ""
+  },
+  {
+   "id": 4334,
+   "name": "Åsane Zoo AS",
+   "address": "Litleåsvegen 41, 5132 Nyborg",
+   "street": "Litleåsvegen 41",
+   "postcode": "5132",
+   "city": "Nyborg",
+   "region": "west",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 40 84 51 70",
+   "website": "https://aasanezoo.com",
+   "hours": ""
   }
  ]
 }
