@@ -1,7 +1,21 @@
 {
- "generated": "2026-10-07T07:15:23",
+ "generated": "2026-10-19T13:32:13",
  "source": "Visma Business NXT company 5813776, brand 260, last 12 months",
  "retailers": [
+  {
+   "id": 3985,
+   "name": "Aktiv Dyreklinikk",
+   "address": "Ånebyveien 19, 1488 Hakadal",
+   "street": "Ånebyveien 19",
+   "postcode": "1488",
+   "city": "Hakadal",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 67 05 05 22",
+   "website": "",
+   "hours": ""
+  },
   {
    "id": 3360,
    "name": "AniCura Dyresykehus Stjørdal",
@@ -41,6 +55,20 @@
    "lat": null,
    "lng": null,
    "phone": "+47 22 73 17 00",
+   "website": "",
+   "hours": ""
+  },
+  {
+   "id": 1233,
+   "name": "Buskerud Zoo og Hestesport",
+   "address": "Lilleåsgata 6, 3340 Åmot",
+   "street": "Lilleåsgata 6",
+   "postcode": "3340",
+   "city": "Åmot",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "",
    "website": "",
    "hours": ""
   },
@@ -87,6 +115,20 @@
    "hours": ""
   },
   {
+   "id": 1284,
+   "name": "Dyrlegen i Bardu",
+   "address": "Industriveien 1, 9360 Bardu",
+   "street": "Industriveien 1",
+   "postcode": "9360",
+   "city": "Bardu",
+   "region": "north",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 99 16 62 21",
+   "website": "",
+   "hours": ""
+  },
+  {
    "id": 1345,
    "name": "Gullfisken Bø",
    "address": "Stasjonsvegen 28, 3800 Bø i Telemark",
@@ -129,6 +171,20 @@
    "hours": ""
   },
   {
+   "id": 1207,
+   "name": "Holmestrand Hund & Katt",
+   "address": "Hvittingfossveien 131, 3085 Holmestrand",
+   "street": "Hvittingfossveien 131",
+   "postcode": "3085",
+   "city": "Holmestrand",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 90 08 88 39",
+   "website": "",
+   "hours": ""
+  },
+  {
    "id": 1367,
    "name": "Hund som Hobby Heimdal",
    "address": "Søbstadveien 7, 7088 Heimdal",
@@ -139,6 +195,20 @@
    "lat": null,
    "lng": null,
    "phone": "+47 72 58 28 00",
+   "website": "",
+   "hours": ""
+  },
+  {
+   "id": 4051,
+   "name": "Jaktkompis",
+   "address": "Unnliveien 10, 8023 Bodø",
+   "street": "Unnliveien 10",
+   "postcode": "8023",
+   "city": "Bodø",
+   "region": "north",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 97 00 26 03",
    "website": "",
    "hours": ""
   },
@@ -157,6 +227,20 @@
    "hours": ""
   },
   {
+   "id": 3454,
+   "name": "K9 Hundesenter",
+   "address": "Øysandveien 143, 7224 Melhus",
+   "street": "Øysandveien 143",
+   "postcode": "7224",
+   "city": "Melhus",
+   "region": "mid",
+   "lat": null,
+   "lng": null,
+   "phone": "",
+   "website": "",
+   "hours": ""
+  },
+  {
    "id": 3690,
    "name": "Krizoo Tønsberg",
    "address": "Håndverkergaten 4, 3117 Tønsberg",
@@ -167,6 +251,20 @@
    "lat": null,
    "lng": null,
    "phone": "+47 33 33 36 70",
+   "website": "",
+   "hours": ""
+  },
+  {
+   "id": 1431,
+   "name": "Leontin's Hund",
+   "address": "Bamrudveien 201, 2093 Feiring",
+   "street": "Bamrudveien 201",
+   "postcode": "2093",
+   "city": "Feiring",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 98 99 80 02",
    "website": "",
    "hours": ""
   },
@@ -195,6 +293,34 @@
    "lat": null,
    "lng": null,
    "phone": "+47 77 06 22 57",
+   "website": "",
+   "hours": ""
+  },
+  {
+   "id": 3884,
+   "name": "Pets Holmen",
+   "address": "Vogellund 6, Holmen senter, 1394 Nesbru",
+   "street": "Vogellund 6, Holmen senter",
+   "postcode": "1394",
+   "city": "Nesbru",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 66 84 82 20",
+   "website": "",
+   "hours": ""
+  },
+  {
+   "id": 1503,
+   "name": "Pets Stoa",
+   "address": "Sørvannsveien 14, 4848 Arendal",
+   "street": "Sørvannsveien 14",
+   "postcode": "4848",
+   "city": "Arendal",
+   "region": "south",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 90 58 58 43",
    "website": "",
    "hours": ""
   },
@@ -241,6 +367,20 @@
    "hours": ""
   },
   {
+   "id": 1517,
+   "name": "Revetal Dyreklinikk",
+   "address": "Revetalgata 3, 3174 Revetal",
+   "street": "Revetalgata 3",
+   "postcode": "3174",
+   "city": "Revetal",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "",
+   "website": "",
+   "hours": ""
+  },
+  {
    "id": 1520,
    "name": "Rune's Hundefôrservice",
    "address": "Smidsrødveien 3A, 3120 Nøtterøy",
@@ -265,7 +405,7 @@
    "lat": null,
    "lng": null,
    "phone": "+47 92 49 75 16",
-   "website": "https://www.saltenzoo.no",
+   "website": "",
    "hours": ""
   },
   {
@@ -283,6 +423,48 @@
    "hours": ""
   },
   {
+   "id": 1526,
+   "name": "Seljord Veterinærkontor",
+   "address": "Kapteinsgate 2C, 3840 Seljord",
+   "street": "Kapteinsgate 2C",
+   "postcode": "3840",
+   "city": "Seljord",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 35 05 09 30",
+   "website": "",
+   "hours": ""
+  },
+  {
+   "id": 1534,
+   "name": "Skedsmo Hund og Katt",
+   "address": "Husebyveien 8, 2020 Skedsmokorset",
+   "street": "Husebyveien 8",
+   "postcode": "2020",
+   "city": "Skedsmokorset",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 47 76 97 12",
+   "website": "",
+   "hours": ""
+  },
+  {
+   "id": 1536,
+   "name": "Ski Akvarium",
+   "address": "Jernbanesvingen 6, 1400 Ski",
+   "street": "Jernbanesvingen 6",
+   "postcode": "1400",
+   "city": "Ski",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 64 85 91 55",
+   "website": "",
+   "hours": ""
+  },
+  {
    "id": 1599,
    "name": "Stavanger Dyrebutikk Randaberg",
    "address": "Randabergveien 310, 4073 Randaberg",
@@ -297,8 +479,50 @@
    "hours": ""
   },
   {
-   "id": 4334,
-   "name": "Åsane Zoo AS",
+   "id": 3435,
+   "name": "Sølvpoten",
+   "address": "Lågendalsveien 121, 3619 Skollenborg",
+   "street": "Lågendalsveien 121",
+   "postcode": "3619",
+   "city": "Skollenborg",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "",
+   "website": "",
+   "hours": ""
+  },
+  {
+   "id": 4350,
+   "name": "Thorsheim Hundesenter",
+   "address": "Haugangrenda 22, 3158 Andebu",
+   "street": "Haugangrenda 22",
+   "postcode": "3158",
+   "city": "Andebu",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 90 41 02 20",
+   "website": "https://thorsheimkennel.no",
+   "hours": ""
+  },
+  {
+   "id": 4195,
+   "name": "Voff-Ro",
+   "address": "Elgfaret 30B, 3617 Kongsberg",
+   "street": "Elgfaret 30B",
+   "postcode": "3617",
+   "city": "Kongsberg",
+   "region": "east",
+   "lat": null,
+   "lng": null,
+   "phone": "+47 90 29 92 34",
+   "website": "",
+   "hours": ""
+  },
+  {
+   "id": 2689,
+   "name": "Åsane Zoo",
    "address": "Litleåsvegen 41, 5132 Nyborg",
    "street": "Litleåsvegen 41",
    "postcode": "5132",
@@ -306,7 +530,7 @@
    "region": "west",
    "lat": null,
    "lng": null,
-   "phone": "+47 40 84 51 70",
+   "phone": "",
    "website": "https://aasanezoo.com",
    "hours": ""
   }
